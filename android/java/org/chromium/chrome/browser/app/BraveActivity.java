@@ -165,8 +165,6 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
             ApplicationLifetime.terminate(false);
         } else if (id == R.id.set_default_browser) {
             handleBraveSetDefaultBrowserDialog();
-        } else if (id == R.id.brave_rewards_id) {
-            openNewOrSelectExistingTab(REWARDS_SETTINGS_URL);
         } else {
             return false;
         }
@@ -234,10 +232,6 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     public void finishNativeInitialization() {
         super.finishNativeInitialization();
 
-        if (BraveRewardsHelper.hasRewardsEnvChange()) {
-            BravePrefServiceBridge.getInstance().resetPromotionLastFetchStamp();
-            BraveRewardsHelper.setRewardsEnvChange(false);
-        }
 
         int appOpenCount = SharedPreferencesManager.getInstance().readInt(BravePreferenceKeys.BRAVE_APP_OPEN_COUNT);
         SharedPreferencesManager.getInstance().writeInt(BravePreferenceKeys.BRAVE_APP_OPEN_COUNT, appOpenCount + 1);
@@ -351,12 +345,6 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
             Calendar calender = Calendar.getInstance();
             calender.setTime(new Date());
             calender.add(Calendar.DATE, DAYS_4);
-            BraveRewardsHelper.setNextRewardsOnboardingModalDate(calender.getTimeInMillis());
-        }
-        if (BraveRewardsHelper.shouldShowRewardsOnboardingModalOnDay4()) {
-            BraveRewardsHelper.setShowBraveRewardsOnboardingModal(true);
-            openRewardsPanel();
-            BraveRewardsHelper.setRewardsOnboardingModalShown(true);
         }
     }
 
@@ -381,7 +369,6 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
             case RetentionNotificationUtil.HOUR_3:
             case RetentionNotificationUtil.HOUR_24:
             case RetentionNotificationUtil.EVERY_SUNDAY:
-                checkForBraveStats();
                 break;
             case RetentionNotificationUtil.DAY_6:
             case RetentionNotificationUtil.BRAVE_STATS_ADS_TRACKERS:
@@ -396,7 +383,6 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
             case RetentionNotificationUtil.DAY_10:
             case RetentionNotificationUtil.DAY_30:
             case RetentionNotificationUtil.DAY_35:
-                openRewardsPanel();
                 break;
             }
         }
@@ -592,8 +578,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
 
     public Tab openNewOrSelectExistingTab(String url) {
         TabModel tabModel = getCurrentTabModel();
-        int tabRewardsIndex = TabModelUtils.getTabIndexByUrl(tabModel, url);
-
+        
         Tab tab = selectExistingTab(url);
         if (tab != null) {
             return tab;

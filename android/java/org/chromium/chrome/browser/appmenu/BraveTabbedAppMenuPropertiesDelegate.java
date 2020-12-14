@@ -74,10 +74,7 @@ public class BraveTabbedAppMenuPropertiesDelegate extends TabbedAppMenuPropertie
         if (!mIsTablet) menu.findItem(R.id.share_row_menu_id).setVisible(false);
 
         menu.add(Menu.NONE, R.id.set_default_browser, 0, R.string.menu_set_default_browser);
-        if (ChromeFeatureList.isEnabled(BraveFeatureList.BRAVE_REWARDS)
-                && !BravePrefServiceBridge.getInstance().getSafetynetCheckFailed()) {
-            menu.add(Menu.NONE, R.id.brave_rewards_id, 0, R.string.menu_brave_rewards);
-        }
+
         menu.add(Menu.NONE, R.id.exit_id, 0, R.string.menu_exit);
 
         if (BraveSetDefaultBrowserNotificationService.isBraveSetAsDefaultBrowser(mContext)) {
@@ -104,7 +101,6 @@ public class BraveTabbedAppMenuPropertiesDelegate extends TabbedAppMenuPropertie
         super.onMenuDismissed();
 
         mMenu.removeItem(R.id.set_default_browser);
-        mMenu.removeItem(R.id.brave_rewards_id);
         mMenu.removeItem(R.id.exit_id);
     }
 

@@ -67,8 +67,7 @@ public class NTPBackgroundImagesBridge {
     }
 
     static public boolean enableSponsoredImages() {
-        return ChromeFeatureList.isEnabled(BraveFeatureList.BRAVE_REWARDS)
-        && !BravePrefServiceBridge.getInstance().getSafetynetCheckFailed();
+        return false;
     }
 
     static public NTPBackgroundImagesBridge getInstance(Profile profile)  {

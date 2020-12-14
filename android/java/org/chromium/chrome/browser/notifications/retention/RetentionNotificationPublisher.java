@@ -65,7 +65,6 @@ public class RetentionNotificationPublisher extends BroadcastReceiver {
                 case RetentionNotificationUtil.DAY_10:
                 case RetentionNotificationUtil.DAY_30:
                 case RetentionNotificationUtil.DAY_35:
-                    braveActivity.openRewardsPanel();
                     break;
                 }
             } else {
@@ -91,13 +90,6 @@ public class RetentionNotificationPublisher extends BroadcastReceiver {
             case RetentionNotificationUtil.DAY_10:
             case RetentionNotificationUtil.DAY_30:
             case RetentionNotificationUtil.DAY_35:
-                // Can't check for rewards code in background
-                if (braveActivity != null
-                        && !BraveAdsNativeHelper.nativeIsBraveAdsEnabled(
-                                Profile.getLastUsedRegularProfile())
-                        && ChromeFeatureList.isEnabled(BraveFeatureList.BRAVE_REWARDS)) {
-                    createNotification(context, intent);
-                }
                 break;
             case RetentionNotificationUtil.EVERY_SUNDAY:
                 if (OnboardingPrefManager.getInstance().isBraveStatsNotificationEnabled()) {

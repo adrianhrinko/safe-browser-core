@@ -100,10 +100,9 @@ public class BraveMainPreferencesBase extends BravePreferenceFragment {
 
         rearrangePreferenceOrders();
 
-        if (!ChromeFeatureList.isEnabled(BraveFeatureList.BRAVE_REWARDS) ||
-                BravePrefServiceBridge.getInstance().getSafetynetCheckFailed()) {
-            removePreferenceIfPresent(PREF_BRAVE_REWARDS);
-        }
+        removePreferenceIfPresent(PREF_BRAVE_REWARDS);
+        removePreferenceIfPresent(PREF_BRAVE_REWARDS);
+        
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M 
             || (NTPUtil.isReferralEnabled() && NTPBackgroundImagesBridge.enableSponsoredImages())) {

@@ -79,7 +79,6 @@ public class BraveOnboardingNotification extends BroadcastReceiver {
                 RetentionNotificationPublisher.backgroundNotificationAction(context, intent);
             }
         } else {
-            showOnboardingNotification(braveActivity);
             if (braveActivity != null) {
                 braveActivity.hideRewardsOnboardingIcon();
             }

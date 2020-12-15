@@ -74,20 +74,6 @@ WebUIController* NewWebUI<BasicUI>(WebUI* web_ui, const GURL& url) {
                  web_ui->GetWebContents()->GetBrowserContext())) {
     return new IPFSUI(web_ui, url.host());
 #endif  // BUILDFLAG(IPFS_ENABLED)
-#if BUILDFLAG(BRAVE_WALLET_ENABLED)
-  } else if (host == kWalletHost) {
-    return new BraveWalletUI(web_ui, url.host());
-#endif  // BUILDFLAG(BRAVE_WALLET_ENABLED)
-#if BUILDFLAG(BRAVE_REWARDS_ENABLED)
-  } else if (host == kRewardsPageHost) {
-    return new BraveRewardsPageUI(web_ui, url.host());
-  } else if (host == kRewardsInternalsHost) {
-    return new BraveRewardsInternalsUI(web_ui, url.host());
-#if !defined(OS_ANDROID)
-  } else if (host == kTipHost) {
-    return new BraveTipUI(web_ui, url.host());
-#endif  // !defined(OS_ANDROID)
-#endif  // BUILDFLAG(BRAVE_REWARDS_ENABLED)
 #if !defined(OS_ANDROID)
   } else if (host == kWelcomeHost) {
     return new BraveWelcomeUI(web_ui, url.host());
@@ -111,14 +97,6 @@ WebUIFactoryFunction GetWebUIFactoryFunction(WebUI* web_ui,
       (url.host_piece() == kIPFSHost &&
           base::FeatureList::IsEnabled(ipfs::features::kIpfsFeature)) ||
 #endif  // BUILDFLAG(IPFS_ENABLED)
-#if BUILDFLAG(BRAVE_WALLET_ENABLED)
-      url.host_piece() == kWalletHost ||
-#endif
-#if BUILDFLAG(BRAVE_REWARDS_ENABLED)
-      url.host_piece() == kRewardsPageHost ||
-      url.host_piece() == kRewardsInternalsHost ||
-      url.host_piece() == kTipHost ||
-#endif
       url.host_piece() == kWelcomeHost ||
       url.host_piece() == chrome::kChromeUIWelcomeURL ||
       url.host_piece() == chrome::kChromeUINewTabHost ||
@@ -132,20 +110,7 @@ WebUIFactoryFunction GetWebUIFactoryFunction(WebUI* web_ui,
 #if defined(OS_ANDROID)
 bool ShouldBlockRewardsWebUI(
       content::BrowserContext* browser_context, const GURL& url) {
-  if (url.host_piece() != kRewardsPageHost &&
-      url.host_piece() != kRewardsInternalsHost) {
-    return false;
-  }
-  if (!base::FeatureList::IsEnabled(features::kBraveRewards)) {
-    return true;
-  }
-  Profile* profile = Profile::FromBrowserContext(browser_context);
-  if (profile &&
-      profile->GetPrefs() &&
-      profile->GetPrefs()->GetBoolean(kSafetynetCheckFailed)) {
-    return true;
-  }
-  return false;
+  return true;
 }
 #endif  // defined(OS_ANDROID)
 

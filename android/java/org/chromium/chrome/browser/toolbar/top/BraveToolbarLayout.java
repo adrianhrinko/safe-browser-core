@@ -336,16 +336,6 @@ public abstract class BraveToolbarLayout extends ToolbarLayout implements OnClic
             && !tab.isIncognito()) {
           mBraveRewardsNativeWorker.OnNotifyFrontTabUrlChanged(tab.getId(), tab.getUrlString());
         }
-        if (PackageUtils.isFirstInstall(getContext()) && tab.getUrlString() != null
-                && (tab.getUrlString().equals(BraveActivity.REWARDS_SETTINGS_URL)
-                        || tab.getUrlString().equals(BraveActivity.BRAVE_REWARDS_SETTINGS_URL))
-                && !BraveAdsNativeHelper.nativeIsBraveAdsEnabled(
-                        Profile.getLastUsedRegularProfile())
-                && BraveRewardsHelper.shouldShowBraveRewardsOnboardingModal()) {
-            showBraveRewardsOnboardingModal();
-            BraveRewardsHelper.updateBraveRewardsAppOpenCount();
-            BraveRewardsHelper.setShowBraveRewardsOnboardingModal(false);
-        }
       }
 
       @Override
@@ -370,112 +360,6 @@ public abstract class BraveToolbarLayout extends ToolbarLayout implements OnClic
     if (mShieldsTooltipPopupWindow != null) {
       mShieldsTooltipPopupWindow.dismiss();
     }
-  }
-
-  private void showBraveRewardsOnboardingModal() {
-      Context context = getContext();
-      final Dialog dialog = new Dialog(context);
-      dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-      dialog.setCancelable(false);
-      dialog.setContentView(R.layout.brave_rewards_onboarding_modal);
-      dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-
-      View braveRewardsOnboardingModalView =
-              dialog.findViewById(R.id.brave_rewards_onboarding_modal_layout);
-      braveRewardsOnboardingModalView.setBackgroundColor(
-              context.getResources().getColor(android.R.color.white));
-      braveRewardsOnboardingModalView.setVisibility(View.VISIBLE);
-
-      String tosText =
-              String.format(context.getResources().getString(R.string.brave_rewards_tos_text),
-                      context.getResources().getString(R.string.terms_of_service),
-                      context.getResources().getString(R.string.privacy_policy));
-      int termsOfServiceIndex =
-              tosText.indexOf(context.getResources().getString(R.string.terms_of_service));
-      Spanned tosTextSpanned = BraveRewardsHelper.spannedFromHtmlString(tosText);
-      SpannableString tosTextSS = new SpannableString(tosTextSpanned.toString());
-
-      ClickableSpan tosClickableSpan = new ClickableSpan() {
-          @Override
-          public void onClick(@NonNull View textView) {
-              CustomTabActivity.showInfoPage(context, BraveActivity.BRAVE_TERMS_PAGE);
-          }
-          @Override
-          public void updateDrawState(@NonNull TextPaint ds) {
-              super.updateDrawState(ds);
-              ds.setUnderlineText(false);
-          }
-      };
-
-      tosTextSS.setSpan(tosClickableSpan, termsOfServiceIndex,
-              termsOfServiceIndex
-                      + context.getResources().getString(R.string.terms_of_service).length(),
-              Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-      tosTextSS.setSpan(new ForegroundColorSpan(context.getResources().getColor(
-                                R.color.brave_rewards_modal_theme_color)),
-              termsOfServiceIndex,
-              termsOfServiceIndex
-                      + context.getResources().getString(R.string.terms_of_service).length(),
-              Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-      ClickableSpan privacyProtectionClickableSpan = new ClickableSpan() {
-          @Override
-          public void onClick(@NonNull View textView) {
-              CustomTabActivity.showInfoPage(context, BraveActivity.BRAVE_PRIVACY_POLICY);
-          }
-          @Override
-          public void updateDrawState(@NonNull TextPaint ds) {
-              super.updateDrawState(ds);
-              ds.setUnderlineText(false);
-          }
-      };
-
-      int privacyPolicyIndex =
-              tosText.indexOf(context.getResources().getString(R.string.privacy_policy));
-      tosTextSS.setSpan(privacyProtectionClickableSpan, privacyPolicyIndex,
-              privacyPolicyIndex
-                      + context.getResources().getString(R.string.privacy_policy).length(),
-              Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-      tosTextSS.setSpan(new ForegroundColorSpan(context.getResources().getColor(
-                                R.color.brave_rewards_modal_theme_color)),
-              privacyPolicyIndex,
-              privacyPolicyIndex
-                      + context.getResources().getString(R.string.privacy_policy).length(),
-              Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-      TextView tosAndPpText = braveRewardsOnboardingModalView.findViewById(R.id.tos_pp_text);
-      tosAndPpText.setMovementMethod(LinkMovementMethod.getInstance());
-      tosAndPpText.setText(tosTextSS);
-
-      TextView takeQuickTourButton =
-              braveRewardsOnboardingModalView.findViewById(R.id.take_quick_tour_button);
-      takeQuickTourButton.setOnClickListener((new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              BraveRewardsHelper.setShowBraveRewardsOnboardingOnce(true);
-              BraveActivity.getBraveActivity().openRewardsPanel();
-              dialog.dismiss();
-          }
-      }));
-      Button btnBraveRewards = braveRewardsOnboardingModalView.findViewById(R.id.btn_brave_rewards);
-      btnBraveRewards.setOnClickListener((new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              BraveAdsNativeHelper.nativeSetAdsEnabled(Profile.getLastUsedRegularProfile());
-              BraveRewardsNativeWorker.getInstance().SetAutoContributeEnabled(true);
-              dialog.dismiss();
-          }
-      }));
-      AppCompatImageView modalCloseButton =
-              braveRewardsOnboardingModalView.findViewById(R.id.modal_close);
-      modalCloseButton.setOnClickListener((new View.OnClickListener() {
-          @Override
-          public void onClick(View v) {
-              dialog.dismiss();
-          }
-      }));
-
-      dialog.show();
   }
 
   private void addSavedBandwidthToDb(long savings) {

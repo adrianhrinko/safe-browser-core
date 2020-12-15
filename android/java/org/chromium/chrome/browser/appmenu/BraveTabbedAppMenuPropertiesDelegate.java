@@ -73,10 +73,6 @@ public class BraveTabbedAppMenuPropertiesDelegate extends TabbedAppMenuPropertie
         // Always hide share row menu item in app menu if it's not on tablet.
         if (!mIsTablet) menu.findItem(R.id.share_row_menu_id).setVisible(false);
 
-        menu.add(Menu.NONE, R.id.set_default_browser, 0, R.string.menu_set_default_browser);
-
-        menu.add(Menu.NONE, R.id.exit_id, 0, R.string.menu_exit);
-
         if (BraveSetDefaultBrowserNotificationService.isBraveSetAsDefaultBrowser(mContext)) {
             menu.findItem(R.id.set_default_browser).setVisible(false);
         }
@@ -99,9 +95,6 @@ public class BraveTabbedAppMenuPropertiesDelegate extends TabbedAppMenuPropertie
     @Override
     public void onMenuDismissed() {
         super.onMenuDismissed();
-
-        mMenu.removeItem(R.id.set_default_browser);
-        mMenu.removeItem(R.id.exit_id);
     }
 
     @Override

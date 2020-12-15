@@ -102,6 +102,8 @@ public class BraveMainPreferencesBase extends BravePreferenceFragment {
 
         removePreferenceIfPresent(PREF_BRAVE_REWARDS);
         removePreferenceIfPresent(PREF_BRAVE_REWARDS);
+        removePreferenceIfPresent(PREF_RATE_BRAVE);
+        removePreferenceIfPresent(PREF_BRAVE_STATS);
         
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M 

@@ -61,12 +61,7 @@ public class AppearancePreferences extends BravePreferenceFragment
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        ChromeSwitchPreference hideBraveRewardsIconPref = (ChromeSwitchPreference) findPreference(PREF_HIDE_BRAVE_REWARDS_ICON);
-        if (hideBraveRewardsIconPref != null) {
-            SharedPreferences sharedPreferences = ContextUtils.getAppSharedPreferences();
-            hideBraveRewardsIconPref.setChecked(sharedPreferences.getBoolean(PREF_HIDE_BRAVE_REWARDS_ICON, false));
-            hideBraveRewardsIconPref.setOnPreferenceChangeListener(this);
-        }
+        removePreferenceIfPresent(PREF_HIDE_BRAVE_REWARDS_ICON);
 
         Preference nightModeEnabled =
                 findPreference(PREF_BRAVE_NIGHT_MODE_ENABLED);

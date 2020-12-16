@@ -251,14 +251,6 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
 
         checkForNotificationData();
 
-        if (!RateUtils.getInstance(this).getPrefRateEnabled()) {
-            RateUtils.getInstance(this).setPrefRateEnabled(true);
-            RateUtils.getInstance(this).setNextRateDateAndCount();
-        }
-
-        if (RateUtils.getInstance(this).shouldShowRateDialog())
-            showBraveRateDialog();
-
         // TODO commenting out below code as we may use it in next release
 
         // if (PackageUtils.isFirstInstall(this)
@@ -293,10 +285,8 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
                 calender.getTimeInMillis());
         }
 
-        if (OnboardingPrefManager.getInstance().showCrossPromoModal()) {
-            showCrossPromotionalDialog();
-            OnboardingPrefManager.getInstance().setCrossPromoModalShown(true);
-        }
+        OnboardingPrefManager.getInstance().setCrossPromoModalShown(true);
+        
         BraveSyncReflectionUtils.showInformers();
 
         if (BraveConfig.P3A_ENABLED) {
@@ -585,12 +575,6 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
         } else { // Open a new tab
             return getTabCreator(false).launchUrl(url, TabLaunchType.FROM_CHROME_UI);
         }
-    }
-
-    private void showBraveRateDialog() {
-        RateDialogFragment mRateDialogFragment = new RateDialogFragment();
-        mRateDialogFragment.setCancelable(false);
-        mRateDialogFragment.show(getSupportFragmentManager(), "RateDialogFragment");
     }
 
     private void showCrossPromotionalDialog() {

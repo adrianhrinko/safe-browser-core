@@ -306,51 +306,6 @@ public class BraveNewTabPageLayout extends NewTabPageLayout {
                     ntpWidgetItem.setWidgetView(mTopSitesLayout);
                     ntpWidgetMap.put(ntpWidgetManager.getFavoritesWidget(), ntpWidgetItem);
                 }
-            } else if (widget.equals(NTPWidgetManager.PREF_BINANCE)) {
-                View binanceWidgetView = inflater.inflate(R.layout.crypto_widget_layout, null);
-                binanceWidgetLayout = binanceWidgetView.findViewById(R.id.binance_widget_layout);
-                bianceDisconnectLayout =
-                        binanceWidgetView.findViewById(R.id.binance_disconnect_layout);
-                binanceWidgetProgress =
-                        binanceWidgetView.findViewById(R.id.binance_widget_progress);
-                binanceWidgetProgress.setVisibility(View.GONE);
-                binanceWidgetView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (InternetConnection.isNetworkAvailable(mActivity)) {
-                            if (BinanceWidgetManager.getInstance()
-                                            .isUserAuthenticatedForBinance()) {
-                                cancelTimer();
-                                cryptoWidgetBottomSheetDialogFragment =
-                                        new CryptoWidgetBottomSheetDialogFragment();
-                                cryptoWidgetBottomSheetDialogFragment.show(
-                                        ((BraveActivity) mActivity).getSupportFragmentManager(),
-                                        CryptoWidgetBottomSheetDialogFragment.TAG_FRAGMENT);
-                            } else {
-                                TabUtils.openUrlInSameTab(mBinanceNativeWorker.getOAuthClientUrl());
-                                bianceDisconnectLayout.setVisibility(View.GONE);
-                                binanceWidgetProgress.setVisibility(View.VISIBLE);
-                            }
-                        } else {
-                            Toast.makeText(mActivity,
-                                         mActivity.getResources().getString(
-                                                 R.string.please_check_the_connection),
-                                         Toast.LENGTH_SHORT)
-                                    .show();
-                        }
-                    }
-                });
-                Button connectButton = binanceWidgetView.findViewById(R.id.btn_connect);
-                connectButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        TabUtils.openUrlInSameTab(mBinanceNativeWorker.getOAuthClientUrl());
-                        bianceDisconnectLayout.setVisibility(View.GONE);
-                        binanceWidgetProgress.setVisibility(View.VISIBLE);
-                    }
-                });
-                ntpWidgetItem.setWidgetView(binanceWidgetView);
-                ntpWidgetMap.put(ntpWidgetManager.getBinanceWidget(), ntpWidgetItem);
             }
         }
 

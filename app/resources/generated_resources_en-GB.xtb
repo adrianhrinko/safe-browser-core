@@ -5981,7 +5981,7 @@ Keep your key file in a safe place. You will need it to create new versions of y
 <translation id="8074127646604999664">Allow recently closed sites to finish sending and receiving data</translation>
 <translation id="8076492880354921740">Tabs</translation>
 <translation id="8076835018653442223">Access to local files on your device is disabled by your administrator</translation>
-<translation id="939305735877869636">Brave</translation>
+<translation id="939305735877869636">Safe browser</translation>
 <translation id="8081989000209387414">Disable ADB debugging?</translation>
 <translation id="8082106343289440791">Pair with "<ph name="DEVICE_NAME"/>"?</translation>
 <translation id="8082390128630131497">Disabling ADB debugging will reset this <ph name="DEVICE_TYPE"/> to factory settings. All user accounts and local data will be deleted.</translation>

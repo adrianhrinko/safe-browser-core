@@ -277,16 +277,9 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
         //     OnboardingPrefManager.getInstance().setOnboardingShownForSkip(true);
         // }
 
-        if (SharedPreferencesManager.getInstance().readInt(BravePreferenceKeys.BRAVE_APP_OPEN_COUNT) == 1) {
-            Calendar calender = Calendar.getInstance();
-            calender.setTime(new Date());
-            calender.add(Calendar.DATE, DAYS_12);
-            OnboardingPrefManager.getInstance().setNextCrossPromoModalDate(
-                calender.getTimeInMillis());
-        }
 
         OnboardingPrefManager.getInstance().setCrossPromoModalShown(true);
-        
+
         BraveSyncReflectionUtils.showInformers();
 
         if (BraveConfig.P3A_ENABLED) {
@@ -575,12 +568,6 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
         } else { // Open a new tab
             return getTabCreator(false).launchUrl(url, TabLaunchType.FROM_CHROME_UI);
         }
-    }
-
-    private void showCrossPromotionalDialog() {
-        CrossPromotionalModalDialogFragment mCrossPromotionalModalDialogFragment = new CrossPromotionalModalDialogFragment();
-        mCrossPromotionalModalDialogFragment.setCancelable(false);
-        mCrossPromotionalModalDialogFragment.show(getSupportFragmentManager(), "CrossPromotionalModalDialogFragment");
     }
 
     private native void nativeRestartStatsUpdater();

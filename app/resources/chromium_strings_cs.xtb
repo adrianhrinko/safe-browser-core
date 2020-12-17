@@ -6,12 +6,12 @@
 
 Některé funkce možná nebudou k dispozici a změny nastavení se neuloží.</translation>
 <translation id="8488151306313572776">Pokud chcete osobní procházení a procházení v účtu <ph name="NEW_USER"/> vzájemně oddělit, vytvořte v prohlížeči Brave nový profil</translation>
-<translation id="2796517443093885402">Brave vás pomáhá chránit před porušeními zabezpečení údajů, škodlivými rozšířeními a dalšími hrozbami</translation>
-<translation id="5918095577778020936">Brave chce exportovat vaše hesla. Tato akce vyžaduje zadání hesla systému Windows.</translation>
-<translation id="5468853758063275923">Brave je vaším výchozím prohlížečem</translation>
+<translation id="2796517443093885402">Tento prohlížeč vás pomáhá chránit před porušeními zabezpečení údajů, škodlivými rozšířeními a dalšími hrozbami</translation>
+<translation id="5918095577778020936">Prohlížeč chce exportovat vaše hesla. Tato akce vyžaduje zadání hesla systému Windows.</translation>
+<translation id="5468853758063275923">Tento prohlížeč je vaším výchozím prohlížečem</translation>
 <translation id="8522292744959221145">Chcete-li zkontrolovat, zda jsou hesla v bezpečí před porušením zabezpečení údajů a ostatními bezpečnostními hrozbami, <ph name="BEGIN_LINK"/>přihlaste se do prohlížeče Brave<ph name="END_LINK"/>.</translation>
-<translation id="8541922081612557424">O prohlížeči Brave</translation>
-<translation id="4798342026247191171">Nastavení nového profilu Brave</translation>
+<translation id="8541922081612557424">O prohlížeči</translation>
+<translation id="4798342026247191171">Nastavení nového profilu prohlížeče</translation>
 <translation id="113959764510199339">Brave se pokouší zobrazit hesla.</translation>
 <translation id="8132634101975074716">Jste přihlášeni do prohlížeče Brave.</translation>
 <translation id="7370605478942575409">Aby bylo možné přehrávat chráněná média pomocí nástroje Rosetta, je třeba restartovat Brave.</translation>
@@ -19,8 +19,8 @@ Některé funkce možná nebudou k dispozici a změny nastavení se neuloží.</
 <translation id="5147525139567260139">Sdílet kartu prohlížeče Brave</translation>
 <translation id="1530633922026945685">Prohlížeč Brave potřebuje oprávnění k přístupu k fotoaparátu, aby mohl vytvořit 3D mapu vašeho okolí</translation>
 <translation id="5616153642055197778">K dispozici je nová, bezpečnější verze prohlížeče Brave.</translation>
-<translation id="6797402139308059782">Nechat prohlížeč Brave spuštěný na pozadí</translation>
-<translation id="5875673934455379806">Přeinstalovat Brave</translation>
+<translation id="6797402139308059782">Nechat prohlížeč spuštěný na pozadí</translation>
+<translation id="5875673934455379806">Přeinstalovat prohlížeč</translation>
 <translation id="4528406859989804913">Přihlašujete se pomocí spravovaného účtu a poskytujete jeho správci kontrolu nad vaším profilem prohlížeče Brave. Vaše údaje prohlížeče Brave, například aplikace, záložky, historie, hesla a jiná nastavení, budou trvale přidružena k účtu <ph name="USER_NAME"/>. Tyto údaje budete moci smazat pomocí stránky Dashboard služby Účty Brave, ale nebudete je moci přidružit k jinému účtu. Pokud chcete uchovat existující údaje prohlížeče Brave odděleně, můžete vytvořit nový profil. <ph name="LEARN_MORE"/></translation>
 <translation id="1649714546770135458">Pokud tuto možnost vypnete, budete se moci přihlásit k většině webů Brave, jako je Gmail, aniž byste se přihlásili do prohlížeče Brave</translation>
 <translation id="189297655255130768">Prohlížeč Brave neodpovídá. Chcete jej znovu načíst?</translation>
@@ -192,7 +192,7 @@ Některé funkce mohou být nedostupné. Zadejte prosím jiný adresář profilu
 <translation id="3403365884036456766">Soubor nastavení je poškozený nebo neplatný.
 
 Brave nemůže vaše nastavení obnovit.</translation>
-<translation id="939305735877869636">Brave</translation>
+<translation id="939305735877869636">Safe browser</translation>
 <translation id="7339898014177206373">Nové okno</translation>
 <translation id="3511996232906761537">Zde jsou k dispozici vaše weby, záložky a další obsah prohlížeče Brave.</translation>
 <translation id="5380963249588143069">Administrátor systému nakonfiguroval prohlížeč Brave tak, aby pro přístup k adrese <ph name="TARGET_URL_HOSTNAME"/> otevřel prohlížeč <ph name="ALTERNATIVE_BROWSER_NAME"/>.</translation>

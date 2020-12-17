@@ -10,7 +10,7 @@ Some features may be unavailable and changes to preferences won't be saved.</tra
 <translation id="5918095577778020936">Brave wants to export your passwords. Type your Windows password to allow this.</translation>
 <translation id="5468853758063275923">Brave is your default browser</translation>
 <translation id="8522292744959221145">To check if your passwords are safe from data breaches and other security issues, <ph name="BEGIN_LINK"/>sign in to Brave<ph name="END_LINK"/>.</translation>
-<translation id="8541922081612557424">About Brave</translation>
+<translation id="8541922081612557424">About browser</translation>
 <translation id="4798342026247191171">Set up your new Brave profile</translation>
 <translation id="113959764510199339">Brave is trying to show passwords.</translation>
 <translation id="8132634101975074716">You're signed in to Brave!</translation>
@@ -192,7 +192,7 @@ Some features may be unavailable. Please specify a different profile directory o
 <translation id="3403365884036456766">Your preferences file is corrupt or invalid.
 
 Brave is unable to recover your settings.</translation>
-<translation id="939305735877869636">Brave</translation>
+<translation id="939305735877869636">Safe browser</translation>
 <translation id="7339898014177206373">New window</translation>
 <translation id="3511996232906761537">Your web, bookmarks and other Brave stuff live here.</translation>
 <translation id="5380963249588143069">Your system administrator has configured Brave to open <ph name="ALTERNATIVE_BROWSER_NAME"/> to access <ph name="TARGET_URL_HOSTNAME"/>.</translation>

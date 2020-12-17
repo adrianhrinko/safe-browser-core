@@ -10,7 +10,7 @@ Niektoré funkcie nemusia byť k dispozícii a zmeny vykonané v predvoľbách s
 <translation id="5918095577778020936">Prehliadač Brave sa pokúša exportovať vaše heslá. Ak to chcete povoliť, zadajte heslo systému Windows.</translation>
 <translation id="5468853758063275923">Brave je vaším predvoleným prehliadačom</translation>
 <translation id="8522292744959221145">Ak chcete skontrolovať, či sú vaše heslá chránené pred porušením ochrany údajov a inými bezpečnostnými hrozbami, <ph name="BEGIN_LINK"/>prihláste sa do prehliadača Brave<ph name="END_LINK"/>.</translation>
-<translation id="8541922081612557424">Informácie o prehliadači Brave</translation>
+<translation id="8541922081612557424">Informácie o prehliadači </translation>
 <translation id="4798342026247191171">Nastavte si nový profil prehliadača Brave</translation>
 <translation id="113959764510199339">Prehliadač Brave sa snaží zobraziť heslá.</translation>
 <translation id="8132634101975074716">Ste prihlásený/-á do prehliadača Brave.</translation>
@@ -192,7 +192,7 @@ Niektoré funkcie nemusia byť k dispozícii. Zadajte iný adresár profilu aleb
 <translation id="3403365884036456766">Súbor predvolieb je poškodený alebo neplatný. 
 
 Prehliadač Brave nedokáže obnoviť vaše nastavenia.</translation>
-<translation id="939305735877869636">Brave</translation>
+<translation id="939305735877869636">Safe browser</translation>
 <translation id="7339898014177206373">Nové okno</translation>
 <translation id="3511996232906761537">Tu nájdete svoj obsah na webe, záložky a ďalšie položky prehliadača Brave.</translation>
 <translation id="5380963249588143069">Správca systému nakonfiguroval Brave, aby <ph name="TARGET_URL_HOSTNAME"/> otváral v prehliadači <ph name="ALTERNATIVE_BROWSER_NAME"/>.</translation>

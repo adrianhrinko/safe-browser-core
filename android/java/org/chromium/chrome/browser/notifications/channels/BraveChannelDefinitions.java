@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class BraveChannelDefinitions {
     public class ChannelId {
-        public static final String BRAVE_BROWSER = "com.brave.browser";
+        public static final String BRAVE_BROWSER = "com.safe.browser";
     }
 
     static protected void addBraveChannels(

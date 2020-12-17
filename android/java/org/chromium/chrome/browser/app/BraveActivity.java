@@ -121,7 +121,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     /**
      * Settings for sending local notification reminders.
      */
-    public static final String CHANNEL_ID = "com.brave.browser";
+    public static final String CHANNEL_ID = "com.safe.browser";
     public static final String ANDROID_SETUPWIZARD_PACKAGE_NAME = "com.google.android.setupwizard";
     public static final String ANDROID_PACKAGE_NAME = "android";
     public static final String BRAVE_BLOG_URL = "http://www.brave.com/blog";
@@ -385,26 +385,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     }
 
     public void showOnboardingV2(boolean fromStats) {
-        try {
-            OnboardingPrefManager.getInstance().setNewOnboardingShown(true);
-            FragmentManager fm = getSupportFragmentManager();
-            HighlightDialogFragment fragment = (HighlightDialogFragment) fm
-                                               .findFragmentByTag(HighlightDialogFragment.TAG_FRAGMENT);
-            FragmentTransaction transaction = fm.beginTransaction();
-
-            if (fragment != null) {
-                transaction.remove(fragment);
-            }
-
-            fragment = new HighlightDialogFragment();
-            Bundle fragmentBundle = new Bundle();
-            fragmentBundle.putBoolean(OnboardingPrefManager.FROM_STATS, fromStats);
-            fragment.setArguments(fragmentBundle);
-            transaction.add(fragment, HighlightDialogFragment.TAG_FRAGMENT);
-            transaction.commitAllowingStateLoss();
-        } catch (IllegalStateException e) {
-            Log.e("HighlightDialogFragment", e.getMessage());
-        }
+        OnboardingPrefManager.getInstance().setNewOnboardingShown(true);
     }
 
     public void hideRewardsOnboardingIcon() {

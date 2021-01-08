@@ -82,6 +82,7 @@ import org.chromium.chrome.browser.util.BraveReferrer;
 import org.chromium.chrome.browser.util.PackageUtils;
 import org.chromium.chrome.browser.widget.crypto.binance.BinanceAccountBalance;
 import org.chromium.chrome.browser.widget.crypto.binance.BinanceWidgetManager;
+import org.chromium.chrome.browser.login.LoginFragment;
 import org.chromium.components.bookmarks.BookmarkId;
 import org.chromium.components.bookmarks.BookmarkType;
 import org.chromium.components.embedder_support.util.UrlConstants;
@@ -89,6 +90,7 @@ import org.chromium.components.embedder_support.util.UrlUtilities;
 import org.chromium.components.search_engines.TemplateUrl;
 import org.chromium.components.user_prefs.UserPrefs;
 import org.chromium.ui.widget.Toast;
+import androidx.fragment.app.Fragment;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -299,36 +301,20 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
             // Remove lines above ^ when onboarding UI step will be ready for P3A
         }
 
-        if (!OnboardingPrefManager.getInstance().isOneTimeNotificationStarted()
-                && PackageUtils.isFirstInstall(this)) {
-            RetentionNotificationUtil.scheduleNotification(this, RetentionNotificationUtil.HOUR_3);
-            RetentionNotificationUtil.scheduleNotification(this, RetentionNotificationUtil.HOUR_24);
-            RetentionNotificationUtil.scheduleNotification(this, RetentionNotificationUtil.DAY_6);
-            RetentionNotificationUtil.scheduleNotification(this, RetentionNotificationUtil.DAY_10);
-            RetentionNotificationUtil.scheduleNotification(this, RetentionNotificationUtil.DAY_30);
-            RetentionNotificationUtil.scheduleNotification(this, RetentionNotificationUtil.DAY_35);
-            RetentionNotificationUtil.scheduleNotification(this, RetentionNotificationUtil.DEFAULT_BROWSER_1);
-            RetentionNotificationUtil.scheduleNotification(this, RetentionNotificationUtil.DEFAULT_BROWSER_2);
-            RetentionNotificationUtil.scheduleNotification(this, RetentionNotificationUtil.DEFAULT_BROWSER_3);
-            OnboardingPrefManager.getInstance().setOneTimeNotificationStarted(true);
-        }
-        if (!TextUtils.isEmpty(BinanceWidgetManager.getInstance().getBinanceAccountBalance())) {
-            try {
-                BinanceWidgetManager.binanceAccountBalance = new BinanceAccountBalance(
-                        BinanceWidgetManager.getInstance().getBinanceAccountBalance());
-            } catch (JSONException e) {
-                Log.e("NTP", e.getMessage());
-            }
+        showFragment(new LoginFragment(), false);
+
+    }
+
+    private void showFragment(Fragment fragment, Boolean backstack) {
+        FragmentTransaction fragmentTransaction = this.getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.coordinator, fragment);
+        fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+
+        if (backstack) {
+            fragmentTransaction.addToBackStack(null);
         }
 
-        if (PackageUtils.isFirstInstall(this)
-                && SharedPreferencesManager.getInstance().readInt(
-                           BravePreferenceKeys.BRAVE_APP_OPEN_COUNT)
-                        == 1) {
-            Calendar calender = Calendar.getInstance();
-            calender.setTime(new Date());
-            calender.add(Calendar.DATE, DAYS_4);
-        }
+        fragmentTransaction.commit();
     }
 
     private void checkForYandexSE() {

@@ -181,10 +181,10 @@ month ...</translation>
 <translation id="3680755684186855422">Brave Sync allows you to sync bookmarks data privately between your Brave Browsers on your various devices.</translation>
 <translation id="3735228155296883311">Simply scan the code from your sync chain that you created on another device, or start a new sync chain.</translation>
 <translation id="5241263629636958324">Copied to Clipboard</translation>
-<translation id="5817918615728894473">Pair</translation>
+<translation id="5817918615728894473">Enter the code</translation>
 <translation id="7090325819305486658">Data Preferences</translation>
 <translation id="1178128181015923849">Are you sure you want to delete device '<ph name="DEVICE_NAME"/>'?</translation>
-<translation id="7745082336226088126">Scan or enter sync code</translation>
+<translation id="7745082336226088126">Scan the code</translation>
 <translation id="1602067095281698985">Start a new sync chain</translation>
 <translation id="1475223680121592371">Add a mobile device</translation>
 <translation id="2965377893636908578">Add a computer</translation>
@@ -194,7 +194,7 @@ month ...</translation>
 <translation id="65315202420929965">Scan this sync code</translation>
 <translation id="6764016175302339802">Treat this code like a password. If someone gets hold of it, they can read and modify your synced data.</translation>
 <translation id="6707003343517029414">On your target computer, navigate to Brave Sync in settings and click the button "I have a Sync Code".\nEnter the sync chain code words shown below.</translation>
-<translation id="2731921493694251495">Enter the sync chain code</translation>
+<translation id="2731921493694251495">Enter the code</translation>
 <translation id="2175927920773552910">QR Code</translation>
 <translation id="8653433343015102968">Code words</translation>
 <translation id="8624315169751085215">Copy to clipboard</translation>

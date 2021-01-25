@@ -189,13 +189,13 @@ ještě nezaregistrovali k příjmu příspěvků. Váš prohlížeč se bude i 
 <translation id="3149880132460839085">Synchronizace prohlížeče Brave</translation>
 <translation id="3680755684186855422">Synchronizace prohlížeče Brave umožňuje bezpečně synchronizovat záložky mezi vašimi zařízeními.</translation>
 <translation id="3735228155296883311">Jednoduše naskenujte kód z vašeho synchronizačního řetězce, který jste si vytvořili na jiném zařízení. Nebo spusťte nový synchronizační řetězec.</translation>
-<translation id="2614069607859982576">Na stávajícím synchronizovaném zařízení otevřete Brave a přejděte do Nastavení &gt; Synchronizace. Vyberte možnost „Přidat nové zařízení“ a poté naskenujte z obrazovky QR kód.</translation>
+<translation id="2614069607859982576">Naskenujte QR-kód z pozvánky</translation>
 <translation id="5241263629636958324">Zkopírováno do schránky</translation>
-<translation id="5817918615728894473">Spárovat</translation>
+<translation id="5817918615728894473">Zadajte kód</translation>
 <translation id="7090325819305486658">Předvolby údajů</translation>
 <translation id="728334460283296316">Odstranit zařízení</translation>
 <translation id="1178128181015923849">Opravdu chcete toto zařízení „<ph name="DEVICE_NAME"/>“ odstranit?</translation>
-<translation id="7745082336226088126">Naskenujte nebo zadejte synchronizační kód</translation>
+<translation id="7745082336226088126">Naskenujte kód</translation>
 <translation id="1602067095281698985">Vytvořit novou synchronizační skupinu</translation>
 <translation id="1475223680121592371">Přidat mobilní zařízení</translation>
 <translation id="2965377893636908578">Přidat počítač</translation>
@@ -213,8 +213,8 @@ ještě nezaregistrovali k příjmu příspěvků. Váš prohlížeč se bude i 
 <translation id="6174119914106813304">SYNCHRONIZOVAT TOTO ZAŘÍZENÍ</translation>
 <translation id="6776430845975754238">Změna nastavení ovlivní pouze údaje, které toto zařízení sdílí s ostatními.</translation>
 <translation id="1061533051865606843">Přidat nové zařízení</translation>
-<translation id="7539985410310934287">Zadejte kódová slova</translation>
-<translation id="2886391679017857869">Na stávajícím synchronizovaném zařízení otevřete Brave a přejděte do Nastavení &gt; Synchronizace. Vyberte možnost „Přidat nové zařízení“ a poté „Zobrazit namísto toho kódová slova“.</translation>
+<translation id="7539985410310934287">Zadejte kód</translation>
+<translation id="2886391679017857869">Zadejte kód z pozvánky</translation>
 <translation id="8131740175452115882">Potvrdit</translation>
 <translation id="4973653569293835178">Použiji svůj fotoaparát...</translation>
 <translation id="326454632686131209">Synchronizovat zařízení</translation>

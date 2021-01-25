@@ -50,9 +50,11 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -86,6 +88,7 @@ import org.chromium.chrome.browser.sync.settings.BraveManageSyncSettings;
 import org.chromium.content_public.browser.UiThreadTaskTraits;
 import org.chromium.ui.KeyboardVisibilityDelegate;
 import org.chromium.ui.base.DeviceFormFactor;
+import androidx.fragment.app.Fragment;
 
 import java.io.IOException;
 import java.lang.Runnable;
@@ -160,12 +163,24 @@ public class BraveSyncScreensPreference extends BravePreferenceFragment
     private FrameLayout mLayoutMobile;
     private FrameLayout mLayoutLaptop;
 
+    private boolean isInitialSyncRequired = false;
+
+    private static final String KEY_INITIAL_SYNC = "INIT_SYNC";
+
     BraveSyncWorker getBraveSyncWorker() {
         Object object = BraveSyncReflectionUtils.getSyncWorker();
         if (object == null) {
             return null;
         }
         return (BraveSyncWorker)object;
+    }
+
+    public static BraveSyncScreensPreference newInstance(boolean isInitialSyncRequired) {
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(KEY_INITIAL_SYNC, isInitialSyncRequired);
+        BraveSyncScreensPreference fragment = new BraveSyncScreensPreference();
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
@@ -193,6 +208,12 @@ public class BraveSyncScreensPreference extends BravePreferenceFragment
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Bundle bundle = this.getArguments();
+
+        if (bundle != null) {
+            isInitialSyncRequired = bundle.getBoolean(KEY_INITIAL_SYNC, false);
+        }
+        
         ProfileSyncService.get().addSyncStateChangedListener(this);
 
         InvalidateCodephrase();
@@ -485,6 +506,8 @@ public class BraveSyncScreensPreference extends BravePreferenceFragment
 
         Log.v(TAG, "setAppropriateView first setup complete " + firstSetupComplete);
         if (!firstSetupComplete) {
+            setJoinExistingChainLayout();
+            /*
             if (null != mCameraSourcePreview) {
                 mCameraSourcePreview.stop();
             }
@@ -513,9 +536,15 @@ public class BraveSyncScreensPreference extends BravePreferenceFragment
             if (null != mCodeWords) {
                 mCodeWords.setText("");
             }
+            */
             return;
         }
-        setSyncDoneLayout();
+
+        if (isInitialSyncRequired) {
+            ((FragmentActivity) getActivity()).getSupportFragmentManager().beginTransaction().remove((Fragment) this).commit();
+        } else {
+            setSyncDoneLayout();
+        }
     }
 
     private void setMainSyncText() {

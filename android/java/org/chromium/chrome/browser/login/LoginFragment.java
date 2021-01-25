@@ -32,7 +32,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         if (R.id.loginButton == v.getId()) {
-            Toast.makeText(getActivity(),"CLOSE",Toast.LENGTH_LONG).show();
             ((FragmentActivity) getActivity()).getSupportFragmentManager().beginTransaction().remove((Fragment) this).commit();
             return;
         }

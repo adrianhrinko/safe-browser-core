@@ -69,6 +69,7 @@ import org.chromium.chrome.browser.rate.RateDialogFragment;
 import org.chromium.chrome.browser.rate.RateUtils;
 import org.chromium.chrome.browser.settings.BraveRewardsPreferences;
 import org.chromium.chrome.browser.settings.BraveSearchEngineUtils;
+import org.chromium.chrome.browser.settings.BraveSyncScreensPreference;
 import org.chromium.chrome.browser.share.ShareDelegate;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabImpl;
@@ -91,6 +92,7 @@ import org.chromium.components.search_engines.TemplateUrl;
 import org.chromium.components.user_prefs.UserPrefs;
 import org.chromium.ui.widget.Toast;
 import androidx.fragment.app.Fragment;
+import org.chromium.chrome.browser.BraveSyncWorker;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -139,6 +141,15 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
         // Disable key checker to avoid asserts on Brave keys in debug
         SharedPreferencesManager.getInstance().disableKeyCheckerForTesting();
     }
+
+    BraveSyncWorker getBraveSyncWorker() {
+        Object object = BraveSyncReflectionUtils.getSyncWorker();
+        if (object == null) {
+            return null;
+        }
+        return (BraveSyncWorker)object;
+    }
+
 
     @Override
     public void onResumeWithNative() {
@@ -244,11 +255,10 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
 
         //set bg ads to off for existing and new installations
         setBgBraveAdsDefaultOff();
-
         Context app = ContextUtils.getApplicationContext();
         if (null != app && (this instanceof ChromeTabbedActivity)) {
             // Trigger BraveSyncWorker CTOR to make migration from sync v1 if sync is enabled
-            BraveSyncReflectionUtils.getSyncWorker();
+            getBraveSyncWorker();
         }
 
         checkForNotificationData();
@@ -301,7 +311,16 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
             // Remove lines above ^ when onboarding UI step will be ready for P3A
         }
 
-        showFragment(new LoginFragment(), false);
+        if (getBraveSyncWorker() == null) {
+            return;
+        }
+
+        if (!getBraveSyncWorker().IsFirstSetupComplete()) {
+            showFragment(BraveSyncScreensPreference.newInstance(true), false);
+        } else {
+            showFragment(new LoginFragment(), false);
+        }
+        
 
     }
 

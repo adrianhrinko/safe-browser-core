@@ -34,7 +34,7 @@ module.exports = [
   'https://sync-v2.brave.com/v2', // brave sync v2 production
   'https://sync-v2.bravesoftware.com/v2', // brave sync v2 staging
   'https://sync-v2.brave.software/v2', // brave sync v2 dev
-  'http://104.46.88.160:8295/sync',
+  'http://20.82.136.139:8295/sync',
   'https://variations.brave.com/seed',
   'https://brave-today-cdn.brave.com/', // Brave Today (production)
   'https://pcdn.brave.com/', // Brave's Privacy-focused CDN

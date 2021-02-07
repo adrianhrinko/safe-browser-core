@@ -62,7 +62,7 @@ namespace {
 // staging "https://sync-v2.bravesoftware.com/v2" can be overriden by
 // switches::kSyncServiceURL manually
 const char kBraveSyncServiceStagingURL[] =
-    "http://104.46.88.160:8295/sync";
+    "http://20.82.136.139:8295/sync";
 }  // namespace
 
 #if !defined(CHROME_MULTIPLE_DLL_BROWSER)

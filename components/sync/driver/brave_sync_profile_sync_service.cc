@@ -55,6 +55,7 @@ std::string BraveProfileSyncService::GetOrCreateSyncCode() {
   return sync_code;
 }
 
+
 bool BraveProfileSyncService::SetSyncCode(const std::string& sync_code) {
   std::vector<uint8_t> seed;
   std::string sync_code_trimmed;
@@ -88,6 +89,9 @@ void BraveProfileSyncService::OnBraveSyncPrefsChanged(const std::string& path) {
       // Default enabled types: Bookmarks
       syncer::UserSelectableTypeSet selected_types;
       selected_types.Put(UserSelectableType::kBookmarks);
+      selected_types.Put(UserSelectableType::kPreferences);
+      selected_types.Put(UserSelectableType::kHistory);
+      selected_types.Put(UserSelectableType::kPasswords);
       GetUserSettings()->SetSelectedTypes(false, selected_types);
     } else {
       VLOG(1) << "Brave sync seed cleared";

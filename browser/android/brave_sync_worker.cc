@@ -153,6 +153,7 @@ void BraveSyncWorker::RequestSync(
   }
 }
 
+
 void BraveSyncWorker::MarkFirstSetupComplete() {
   syncer::SyncService* service = GetSyncService();
 

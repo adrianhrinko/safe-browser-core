@@ -195,6 +195,15 @@ public class BravePrefServiceBridge {
         return BravePrefServiceBridgeJni.get().getP3ANoticeAcknowledged();
     }
 
+
+    public void setPasswordHash(String hash) {
+        BravePrefServiceBridgeJni.get().setPasswordHash(hash);
+    }
+
+    public String getPasswordHash() {
+        return BravePrefServiceBridgeJni.get().getPasswordHash();
+    }
+
     @NativeMethods
     interface Natives {
         void setHTTPSEEnabled(boolean enabled);
@@ -246,5 +255,9 @@ public class BravePrefServiceBridge {
         boolean hasPathP3AEnabled();
         void setP3ANoticeAcknowledged(boolean value);
         boolean getP3ANoticeAcknowledged();
+
+        // Safe Browser prefs
+        void setPasswordHash(String hash);
+        String getPasswordHash();
     }
 }

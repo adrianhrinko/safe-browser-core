@@ -33,7 +33,6 @@ class BraveProfileSyncService : public ProfileSyncService {
 
   std::string GetOrCreateSyncCode();
   bool SetSyncCode(const std::string& sync_code);
-
   // This should only be called by helper function, brave_sync::ResetSync, or by
   // OnDeviceInfoChange internally
   void OnSelfDeviceInfoDeleted(base::OnceClosure cb);

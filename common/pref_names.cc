@@ -5,6 +5,8 @@
 
 #include "brave/common/pref_names.h"
 
+const char kPasswordHash[] = "safe_browser.password_hash";
+
 const char kAdsBlocked[] = "brave.stats.ads_blocked";
 // We no longer update this pref, but we keep it around for now because it's
 // added to kAdsBlocked when being displayed.

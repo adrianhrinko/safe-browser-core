@@ -31,6 +31,7 @@
 #endif
 
 using base::android::ConvertUTF8ToJavaString;
+using base::android::ConvertUTF8ToJavaString;
 using base::android::JavaParamRef;
 using base::android::ScopedJavaLocalRef;
 using brave_shields::ControlType;
@@ -212,6 +213,19 @@ void JNI_BravePrefServiceBridge_SetSafetynetCheckFailed(
 
 jboolean JNI_BravePrefServiceBridge_GetSafetynetCheckFailed(JNIEnv* env) {
   return GetOriginalProfile()->GetPrefs()->GetBoolean(kSafetynetCheckFailed);
+}
+
+void JNI_BravePrefServiceBridge_SetPasswordHash(
+    JNIEnv* env,
+    const base::android::JavaParamRef<jstring>& hash) {
+  LOG(INFO) << "Setting password hash: " << ConvertJavaStringToUTF8(env, hash);
+  GetOriginalProfile()->GetPrefs()->SetString(kPasswordHash, ConvertJavaStringToUTF8(env, hash));
+}
+
+base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetPasswordHash(JNIEnv* env) {
+  std::string hash = GetOriginalProfile()->GetPrefs()->GetString(kPasswordHash);
+  LOG(INFO) << "Getting password hash: " << hash;
+  return ConvertUTF8ToJavaString(env, hash);
 }
 
 void JNI_BravePrefServiceBridge_SetSafetynetStatus(

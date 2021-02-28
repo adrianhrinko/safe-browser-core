@@ -1,5 +1,5 @@
 diff --git a/chrome/browser/profiles/profile_impl.cc b/chrome/browser/profiles/profile_impl.cc
-index 1c6cb0b66b46a958ad57f3f8c31ad225558d5c71..9ad82d26e2760cb0e06d95fedaed9c4f26986b49 100644
+index 1c6cb0b66b46a958ad57f3f8c31ad225558d5c71..bcce21710179931ac4718efd059a0cf96e6577aa 100644
 --- a/chrome/browser/profiles/profile_impl.cc
 +++ b/chrome/browser/profiles/profile_impl.cc
 @@ -356,7 +356,7 @@ std::unique_ptr<Profile> Profile::CreateProfile(const base::FilePath& path,
@@ -11,3 +11,31 @@ index 1c6cb0b66b46a958ad57f3f8c31ad225558d5c71..9ad82d26e2760cb0e06d95fedaed9c4f
        path, delegate, create_mode, creation_time, io_task_runner));
  #if BUILDFLAG(ENABLE_SUPERVISED_USERS) && !defined(OS_ANDROID) && \
      !defined(OS_CHROMEOS)
+@@ -372,11 +372,14 @@ const char ProfileImpl::kPrefExitTypeNormal[] = "Normal";
+ // static
+ void ProfileImpl::RegisterProfilePrefs(
+     user_prefs::PrefRegistrySyncable* registry) {
+-  registry->RegisterBooleanPref(prefs::kSavingBrowserHistoryDisabled, false);
++  registry->RegisterBooleanPref(prefs::kSavingBrowserHistoryDisabled, false, 
++  user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
+   registry->RegisterBooleanPref(prefs::kAllowDeletingBrowserHistory, true);
+-  registry->RegisterBooleanPref(prefs::kForceGoogleSafeSearch, false);
++  registry->RegisterBooleanPref(prefs::kForceGoogleSafeSearch, false, 
++  user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
+   registry->RegisterIntegerPref(prefs::kForceYouTubeRestrict,
+-                                safe_search_util::YOUTUBE_RESTRICT_OFF);
++                                safe_search_util::YOUTUBE_RESTRICT_OFF, 
++                                user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
+   registry->RegisterStringPref(prefs::kAllowedDomainsForApps, std::string());
+ 
+   registry->RegisterIntegerPref(prefs::kProfileAvatarIndex, -1);
+@@ -400,7 +403,8 @@ void ProfileImpl::RegisterProfilePrefs(
+                                std::string());
+ 
+ #if BUILDFLAG(ENABLE_PRINTING)
+-  registry->RegisterBooleanPref(prefs::kPrintingEnabled, true);
++  registry->RegisterBooleanPref(prefs::kPrintingEnabled, true, 
++  user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
+ #endif  // BUILDFLAG(ENABLE_PRINTING)
+   registry->RegisterBooleanPref(prefs::kPrintPreviewDisabled, false);
+   registry->RegisterStringPref(

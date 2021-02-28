@@ -1,0 +1,37 @@
+diff --git a/chrome/android/java/res/layout/bottom_control_container.xml b/chrome/android/java/res/layout/bottom_control_container.xml
+index a19b66115758b4fd76ed2e6aeab100ec9cd9f070..614dbcd291d76363b691dab7b813a49c359240f6 100644
+--- a/chrome/android/java/res/layout/bottom_control_container.xml
++++ b/chrome/android/java/res/layout/bottom_control_container.xml
+@@ -1,9 +1,9 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<!-- Copyright 2019 The Chromium Authors. All rights reserved.
++<!-- Copyright 2020 The Brave Authors. All rights reserved.
+      Use of this source code is governed by a BSD-style license that can be
+      found in the LICENSE file. -->
+ 
+-<org.chromium.chrome.browser.toolbar.bottom.ScrollingBottomViewResourceFrameLayout
++<org.chromium.chrome.browser.toolbar.bottom.BraveScrollingBottomViewResourceFrameLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+     android:layout_width="match_parent"
+@@ -27,8 +27,18 @@
+         <FrameLayout
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+-            android:id="@+id/bottom_container_slot" />
++            android:id="@+id/bottom_container_slot" >
++
++            <ViewStub
++                android:id="@+id/bottom_toolbar_stub"
++                android:layout_width="match_parent"
++                android:layout_height="match_parent"
++                android:layout_gravity="start|bottom"
++                android:inflatedId="@+id/bottom_toolbar"
++                android:layout="@layout/bottom_toolbar" />
++
++        </FrameLayout>
+ 
+     </LinearLayout>
+ 
+-</org.chromium.chrome.browser.toolbar.bottom.ScrollingBottomViewResourceFrameLayout>
++</org.chromium.chrome.browser.toolbar.bottom.BraveScrollingBottomViewResourceFrameLayout>

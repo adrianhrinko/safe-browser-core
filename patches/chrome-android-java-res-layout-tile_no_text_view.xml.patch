@@ -1,0 +1,45 @@
+diff --git a/chrome/android/java/res/layout/tile_no_text_view.xml b/chrome/android/java/res/layout/tile_no_text_view.xml
+index df843fe31e2d90b3e0bfc996b7d38e669ce97d61..d8a7018e559d457838e9922a215653f10b97b899 100644
+--- a/chrome/android/java/res/layout/tile_no_text_view.xml
++++ b/chrome/android/java/res/layout/tile_no_text_view.xml
+@@ -9,22 +9,12 @@
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     xmlns:tools="http://schemas.android.com/tools" >
+ 
+-    <!-- The icon background. -->
+-    <View
+-        android:id="@+id/tile_view_icon_background"
+-        android:layout_width="@dimen/tile_view_icon_size"
+-        android:layout_height="@dimen/tile_view_icon_size"
+-        android:layout_gravity="center_horizontal"
+-        android:layout_marginTop="@dimen/tile_view_icon_background_margin_top_modern"
+-        android:background="@drawable/tile_view_icon_background_modern" />
+-
+     <!-- The main icon. -->
+     <ImageView
+         android:id="@+id/tile_view_icon"
+-        android:layout_width="@dimen/tile_view_icon_size_modern"
+-        android:layout_height="@dimen/tile_view_icon_size_modern"
++        android:layout_width="@dimen/brave_tile_view_icon_size_modern"
++        android:layout_height="@dimen/brave_tile_view_icon_size_modern"
+         android:layout_gravity="center_horizontal"
+-        android:layout_marginTop="@dimen/tile_view_icon_margin_top_modern"
+         tools:ignore="ContentDescription" />
+ 
+     <!-- The touch highlight. -->
+@@ -33,7 +23,6 @@
+         android:layout_width="@dimen/tile_view_icon_size"
+         android:layout_height="@dimen/tile_view_icon_size"
+         android:layout_gravity="center_horizontal"
+-        android:layout_marginTop="@dimen/tile_view_icon_background_margin_top_modern"
+         android:background="@drawable/tile_view_highlight" />
+ 
+     <!-- The offline badge. -->
+@@ -42,7 +31,6 @@
+         android:layout_width="@dimen/tile_view_offline_badge_size_modern"
+         android:layout_height="@dimen/tile_view_offline_badge_size_modern"
+         android:layout_gravity="top|end"
+-        android:layout_marginTop="@dimen/tile_view_offline_badge_margin_top_modern"
+         android:layout_marginEnd="@dimen/tile_view_offline_badge_margin_end_modern"
+         android:visibility="gone"
+         android:contentDescription="@string/accessibility_ntp_offline_badge"

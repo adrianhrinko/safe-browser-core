@@ -1,0 +1,14 @@
+diff --git a/chrome/browser/prefs/incognito_mode_prefs.cc b/chrome/browser/prefs/incognito_mode_prefs.cc
+index 98f6ab2937fc912caeb1bf6c31ab94d6c30d3185..840d0e9a87cf69d711ac78f04021ad1f91da1441 100644
+--- a/chrome/browser/prefs/incognito_mode_prefs.cc
++++ b/chrome/browser/prefs/incognito_mode_prefs.cc
+@@ -55,7 +55,8 @@ void IncognitoModePrefs::SetAvailability(PrefService* prefs,
+ void IncognitoModePrefs::RegisterProfilePrefs(
+     user_prefs::PrefRegistrySyncable* registry) {
+   registry->RegisterIntegerPref(prefs::kIncognitoModeAvailability,
+-                                kDefaultAvailability);
++                                kDefaultAvailability,
++                                user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
+ }
+ 
+ // static

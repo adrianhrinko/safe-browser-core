@@ -1,0 +1,22 @@
+diff --git a/chrome/android/java/res/layout/tab_switcher_toolbar.xml b/chrome/android/java/res/layout/tab_switcher_toolbar.xml
+index b7404b695fa2adb1346a9ed1205ec14c44fd5a49..5c2516c0aeddaeac2bd652540e5c64d70d176767 100644
+--- a/chrome/android/java/res/layout/tab_switcher_toolbar.xml
++++ b/chrome/android/java/res/layout/tab_switcher_toolbar.xml
+@@ -1,9 +1,9 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<!-- Copyright 2018 The Chromium Authors. All rights reserved.
++<!-- Copyright 2020 The Brave Authors. All rights reserved.
+      Use of this source code is governed by a BSD-style license that can be
+      found in the LICENSE file. -->
+ 
+-<org.chromium.chrome.browser.toolbar.top.TabSwitcherModeTTPhone
++<org.chromium.chrome.browser.toolbar.top.BraveTabSwitcherModeTTPhone
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:id="@+id/tab_switcher_toolbar"
+@@ -95,4 +95,4 @@
+ 
+     </LinearLayout>
+ 
+-</org.chromium.chrome.browser.toolbar.top.TabSwitcherModeTTPhone>
++</org.chromium.chrome.browser.toolbar.top.BraveTabSwitcherModeTTPhone>

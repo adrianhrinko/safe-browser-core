@@ -1,0 +1,240 @@
+diff --git a/chrome/android/java/res/layout/new_tab_page_layout.xml b/chrome/android/java/res/layout/new_tab_page_layout.xml
+index 7a66aaf79726b1227b694fe94184e4bec21f29c8..d061e4868439dacef8a7189b32a6886411442ba3 100644
+--- a/chrome/android/java/res/layout/new_tab_page_layout.xml
++++ b/chrome/android/java/res/layout/new_tab_page_layout.xml
+@@ -2,20 +2,24 @@
+ <!-- Copyright 2016 The Chromium Authors. All rights reserved.
+      Use of this source code is governed by a BSD-style license that can be
+      found in the LICENSE file. -->
+-<org.chromium.chrome.browser.ntp.NewTabPageLayout
++<org.chromium.chrome.browser.ntp.BraveNewTabPageLayout
+     xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:app="http://schemas.android.com/apk/res-auto"
+-    xmlns:tools="http://schemas.android.com/tools"
+     android:id="@+id/ntp_content"
+     android:layout_width="match_parent"
+-    android:layout_height="wrap_content"
++    android:layout_height="match_parent"
+     android:layout_gravity="center_horizontal"
+     android:orientation="vertical"
+     android:gravity="center"
+     android:paddingTop="@dimen/toolbar_height_no_shadow"
+     android:visibility="gone" >
+ 
+-    <!-- Search provider logo -->
++    <ImageView
++        android:id="@+id/bg_image_view"
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:contentDescription="@null"/>
++
+     <FrameLayout
+         android:id="@+id/logo_holder"
+         android:layout_width="match_parent"
+@@ -30,7 +34,7 @@
+ 
+         <org.chromium.chrome.browser.ntp.LogoView
+             android:id="@+id/search_provider_logo"
+-            android:layout_width="match_parent"
++            android:layout_width="wrap_content"
+             android:layout_height="@dimen/ntp_logo_height"
+             android:layout_gravity="center_horizontal"
+             android:layout_marginStart="16dp"
+@@ -40,59 +44,148 @@
+ 
+     </FrameLayout>
+ 
+-    <!-- Search box -->
+-    <include layout="@layout/fake_search_box_layout"/>
+-
+-    <!-- Query tiles -->
+-    <FrameLayout
+-        android:id="@+id/query_tiles"
++    <LinearLayout
++        android:id="@+id/parent_layout"
+         android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_marginTop="16dp"
+-        android:visibility="gone"/>
++        android:layout_height="match_parent"
++        android:layout_gravity="center_horizontal"
++        android:orientation="vertical">
+ 
+-    <!-- Middle spacer -->
+-    <View
+-        android:id="@+id/ntp_middle_spacer"
+-        android:layout_width="0dp"
+-        android:layout_height="0dp"
+-        android:layout_weight="0"
+-        android:visibility="invisible" />
++        <LinearLayout
++            android:id="@+id/ntp_main_layout"
++            android:layout_width="match_parent"
++            android:layout_height="0dp"
++            android:layout_weight="1"
++            android:orientation="vertical">
+ 
+-    <!-- Insertion point of the SiteSectionView, see NewTabPageLayout#insertSiteSection() -->
++            <LinearLayout
++                android:id="@+id/ntp_widget_layout"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginTop="12dp"
++                android:layout_marginStart="12dp"
++                android:layout_marginBottom="12dp"
++                android:orientation="horizontal">
+ 
+-    <ViewStub
+-        android:id="@+id/explore_sites_stub"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:inflatedId="@+id/explore_sites"
+-        android:layout_marginBottom="16dp"
+-        android:layout="@layout/explore_sites_section" />
++                <androidx.cardview.widget.CardView
++                    android:layout_width="0dp"
++                    android:layout_height="140dp"
++                    android:layout_weight="1"
++                    app:cardCornerRadius="12dp">
+ 
+-    <!-- Site suggestion tile grid placeholder -->
+-    <ViewStub
+-        android:id="@+id/tile_grid_placeholder_stub"
+-        android:layout_width="match_parent"
+-        android:layout_height="wrap_content"
+-        android:layout_weight="1"
+-        android:inflatedId="@+id/tile_grid_placeholder"
+-        android:layout="@layout/new_tab_page_tile_grid_placeholder" />
++                    <org.chromium.chrome.browser.custom_layout.VerticalViewPager
++                        android:id="@+id/ntp_widget_view_pager"
++                        android:layout_width="match_parent"
++                        android:layout_height="match_parent"/>
+ 
+-    <!-- Video tutorial IPH card -->
+-    <ViewStub
+-        android:id="@+id/video_iph_stub"
+-        android:layout_width="match_parent"
++                </androidx.cardview.widget.CardView>
++
++                <LinearLayout
++                    android:id="@+id/indicator_layout"
++                    android:layout_width="12dp"
++                    android:layout_height="wrap_content"
++                    android:layout_gravity="center_vertical"
++                    android:background="@drawable/ntp_widget_indicator_bg"
++                    android:padding="2dp"
++                    android:orientation="vertical"/>
++
++            </LinearLayout>
++
++            <!-- Search box -->
++            <include layout="@layout/fake_search_box_layout"/>
++
++            <!-- Query tiles -->
++            <FrameLayout
++                android:id="@+id/query_tiles"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginTop="16dp"
++                android:visibility="gone"/>
++
++            <!-- Video tutorial IPH card -->
++            <ViewStub
++                android:id="@+id/video_iph_stub"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_marginTop="12dp"
++                android:layout="@layout/video_tutorial_iph_card"
++                android:inflatedId="@+id/video_iph_card"/>
++
++            <!-- Middle spacer -->
++            <View
++                android:id="@+id/ntp_middle_spacer"
++                android:layout_width="0dp"
++                android:layout_height="0dp"
++                android:layout_weight="0"
++                android:visibility="invisible" />
++
++            <!-- Insertion point of the SiteSectionView, see NewTabPageLayout#insertSiteSection() -->
++
++            <ViewStub
++                android:id="@+id/explore_sites_stub"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:inflatedId="@+id/explore_sites"
++                android:layout_marginBottom="16dp"
++                android:layout="@layout/explore_sites_section" />
++
++            <!-- Site suggestion tile grid placeholder -->
++            <ViewStub
++                android:id="@+id/tile_grid_placeholder_stub"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:layout_weight="1"
++                android:inflatedId="@+id/tile_grid_placeholder"
++                android:layout="@layout/new_tab_page_tile_grid_placeholder" />
++
++            <!-- Spacer for when there is no search provider logo. -->
++            <View
++                android:id="@+id/no_search_logo_spacer"
++                android:layout_width="match_parent"
++                android:layout_height="0dp"
++                android:layout_weight="1"
++                android:visibility="gone" />
++
++        </LinearLayout>
++
++        <FrameLayout
++            android:id="@+id/image_credit_layout"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content">
++
++            <TextView
++                android:id="@+id/credit_text"
++                android:layout_width="wrap_content"
++                android:layout_height="wrap_content"
++                android:layout_gravity="start|bottom"
++                android:background="@drawable/image_credit_rounded_shape"
++                android:padding="5dp"
++                android:layout_margin="10dp"
++                android:textSize="12sp"
++                android:visibility="gone"
++                android:textColor = "@android:color/white"/>
++
++            <ImageView
++                android:id="@+id/sponsored_logo"
++                android:layout_width="170dp"
++                android:layout_height="170dp"
++                android:contentDescription="@null"
++                android:visibility="gone"/>
++
++        </FrameLayout>
++
++    </LinearLayout>
++
++    <include layout="@layout/ntp_non_disruptive_banner"/>
++
++    <com.google.android.material.floatingactionbutton.FloatingActionButton
++        android:id="@+id/super_referral_logo"
++        android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+-        android:layout_marginTop="12dp"
+-        android:layout_marginBottom="12dp"
+-        android:layout="@layout/video_tutorial_iph_card"
+-        android:inflatedId="@+id/video_iph_card"/>
+-
+-    <!-- Spacer for when there is no search provider logo. -->
+-    <View
+-        android:id="@+id/no_search_logo_spacer"
+-        android:layout_width="match_parent"
+-        android:layout_height="0dp"
+-        android:layout_weight="1"
+-        android:visibility="gone" />
+-</org.chromium.chrome.browser.ntp.NewTabPageLayout>
++        android:src="@drawable/qrcode_light"
++        android:layout_gravity="bottom|center"
++        android:layout_marginBottom="16dp"
++        android:visibility="gone"
++        app:backgroundTint="@color/qr_button_color"/>
++
++</org.chromium.chrome.browser.ntp.BraveNewTabPageLayout>

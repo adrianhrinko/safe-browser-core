@@ -1,0 +1,22 @@
+diff --git a/chrome/android/java/res/layout/location_status_incognito_badge.xml b/chrome/android/java/res/layout/location_status_incognito_badge.xml
+index 0b134e19af451b1329324994c2c8ef9c94419d12..b2839d6053c71cf2152a61b1ba6fc309e3e1c9c6 100644
+--- a/chrome/android/java/res/layout/location_status_incognito_badge.xml
++++ b/chrome/android/java/res/layout/location_status_incognito_badge.xml
+@@ -1,7 +1,8 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<!-- Copyright 2019 The Chromium Authors. All rights reserved.
+-     Use of this source code is governed by a BSD-style license that can be
+-     found in the LICENSE file. -->
++<!--* Copyright (c) 2020 The Brave Authors. All rights reserved.
++ * This Source Code Form is subject to the terms of the Mozilla Public
++ * License, v. 2.0. If a copy of the MPL was not distributed with this
++ * file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+ 
+ <org.chromium.ui.widget.ChromeImageView
+     xmlns:android="http://schemas.android.com/apk/res/android"
+@@ -11,4 +12,4 @@
+     android:layout_gravity="center_vertical"
+     android:visibility="gone"
+     android:contentDescription="@string/accessibility_incognito_badge"
+-    app:srcCompat="@drawable/location_bar_incognito_badge" />
++    android:src="@drawable/incognito_simple" />

@@ -1,0 +1,12 @@
+diff --git a/components/sync/base/pref_names.h b/components/sync/base/pref_names.h
+index e4513908691d3786ebb2a0bbc08b86a075aeca12..1e393f20365c0b7f7c31d634c5d274e5f282463a 100644
+--- a/components/sync/base/pref_names.h
++++ b/components/sync/base/pref_names.h
+@@ -25,6 +25,7 @@ extern const char kSyncOsApps[];
+ extern const char kSyncOsPreferences[];
+ #endif  // defined(OS_CHROMEOS)
+ 
++extern const char kPasswordHash[];
+ extern const char kSyncApps[];
+ extern const char kSyncAutofill[];
+ extern const char kSyncBookmarks[];

@@ -1,0 +1,15 @@
+diff --git a/components/policy/core/browser/url_blocklist_manager.cc b/components/policy/core/browser/url_blocklist_manager.cc
+index 66425b8cb0e79b42b1b4a94ef86c742703fe0b57..a886b2f7c32f07e7aaed7d67a97cf45ff859bbb4 100644
+--- a/components/policy/core/browser/url_blocklist_manager.cc
++++ b/components/policy/core/browser/url_blocklist_manager.cc
+@@ -274,8 +274,8 @@ URLBlocklist::URLBlocklistState URLBlocklistManager::GetURLBlocklistState(
+ // static
+ void URLBlocklistManager::RegisterProfilePrefs(
+     user_prefs::PrefRegistrySyncable* registry) {
+-  registry->RegisterListPref(policy_prefs::kUrlBlacklist);
+-  registry->RegisterListPref(policy_prefs::kUrlWhitelist);
++  registry->RegisterListPref(policy_prefs::kUrlBlacklist, user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
++  registry->RegisterListPref(policy_prefs::kUrlWhitelist, user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
+   registry->RegisterIntegerPref(
+       policy_prefs::kSafeSitesFilterBehavior,
+       static_cast<int>(SafeSitesFilterBehavior::kSafeSitesFilterDisabled));

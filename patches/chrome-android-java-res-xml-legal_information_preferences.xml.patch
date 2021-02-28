@@ -1,0 +1,27 @@
+diff --git a/chrome/android/java/res/xml/legal_information_preferences.xml b/chrome/android/java/res/xml/legal_information_preferences.xml
+index 8f1c579f375d438cc9c7b9a2affb2e9452453dd7..15adc6e0291b976e789f4a6401c337095d822e0e 100644
+--- a/chrome/android/java/res/xml/legal_information_preferences.xml
++++ b/chrome/android/java/res/xml/legal_information_preferences.xml
+@@ -11,15 +11,15 @@
+         android:title="@string/open_source_license_title"
+         app:url="@string/open_source_license_url" />
+     <org.chromium.chrome.browser.about_settings.HyperlinkPreference
+-        android:key="google_terms_of_service"
++        android:key="terms_of_service"
+         android:title="@string/google_terms_of_service_title"
+-        app:url="@string/google_terms_of_service_url" />
+-    <org.chromium.chrome.browser.about_settings.HyperlinkPreference
+-        android:key="chrome_additional_terms_of_service"
+-        android:title="@string/chrome_additional_terms_of_service_title"
+-        app:url="@string/chrome_additional_terms_of_service_url" />
++        app:url="@string/brave_terms_of_service_url" />
+     <org.chromium.chrome.browser.about_settings.HyperlinkPreference
+         android:key="privacy_notice"
+         android:title="@string/privacy_notice_title"
+-        app:url="@string/chrome_privacy_notice_url" />
++        app:url="@string/brave_privacy_notice_url" />
++    <Preference
++        android:fragment="org.chromium.chrome.browser.settings.BraveLicensePreferences"
++        android:key="brave_license"
++        android:title="@string/brave_license_text" />
+ </PreferenceScreen>

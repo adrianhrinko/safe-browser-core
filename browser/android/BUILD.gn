@@ -17,6 +17,7 @@ source_set("android_browser_process") {
   deps = [
     "//base",
     "//brave/browser/android/preferences",
+    "//brave/browser/android/login",
     "//brave/browser/brave_stats:stats_updater",
     "//brave/build/android:jni_headers",
     "//brave/components/brave_shields/browser",

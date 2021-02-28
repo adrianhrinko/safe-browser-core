@@ -12,10 +12,13 @@ import android.widget.TextView;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.app.Activity;
-import org.chromium.chrome.browser.preferences.BravePrefServiceBridge;
+import org.chromium.chrome.browser.login.LoginServiceBridge;
 
 
 public class LoginFragment extends Fragment implements View.OnClickListener{
+
+    private View loaderLayout;
+    private View passwordLayout;
 
     private TextView detail;
     private TextView btnConfirm;
@@ -29,21 +32,64 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     @Override 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
+
+        loaderLayout = (View) rootView.findViewById(R.id.password_loader);
+        passwordLayout = (View) rootView.findViewById(R.id.password_form);
+
         password = (EditText) rootView.findViewById(R.id.passwordEntry);
         detail = (TextView) rootView.findViewById(R.id.loginFragmentDetail);
-        detail.setText(BravePrefServiceBridge.getInstance().getPasswordHash());
+        detail.setText("Enter your password, please.");
         btnConfirm = (TextView) rootView.findViewById(R.id.loginButton);
         btnConfirm.setOnClickListener(this);
+
         return rootView;
     }
 
     @Override
     public void onClick(View v) {
         if (R.id.loginButton == v.getId()) {
-            BravePrefServiceBridge.getInstance().setPasswordHash("\"" + password.getText().toString() + "\"");
-            ((FragmentActivity) getActivity()).getSupportFragmentManager().beginTransaction().remove((Fragment) this).commit();
+            tryLogin();
             return;
         }
     }
+
+    public void tryLogin() {
+        String pass = password.getText().toString();
+
+        showLoader();
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                boolean isPassValid = LoginServiceBridge.getInstance().authenticate(pass);
+                if (isPassValid) {
+                    closeFragment();
+                } else {
+                    updateOnInvalidPAssword();
+                }             
+            }
+        });
+    }
+
+    public void showLoader() {
+        passwordLayout.setVisibility(View.GONE);
+        loaderLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void hideLoader() {
+        loaderLayout.setVisibility(View.GONE);
+        passwordLayout.setVisibility(View.VISIBLE);
+    }
+
+    public void closeFragment() {
+        ((FragmentActivity) getActivity()).getSupportFragmentManager().beginTransaction().remove((Fragment) this).commit();
+    }
+
+    public void updateOnInvalidPAssword() {
+        hideLoader();
+        detail.setText("Entered password is invalid.");
+
+    }
+
 
 }

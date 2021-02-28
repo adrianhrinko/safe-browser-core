@@ -1,0 +1,30 @@
+diff --git a/chrome/android/java/res/xml/clear_browsing_data_preferences_tab.xml b/chrome/android/java/res/xml/clear_browsing_data_preferences_tab.xml
+index 9e9de9104dabe362dae4d55a35da2b9b04f41b66..b6dee4403908c4d5d336572073fb6e8ed9b0aa4f 100644
+--- a/chrome/android/java/res/xml/clear_browsing_data_preferences_tab.xml
++++ b/chrome/android/java/res/xml/clear_browsing_data_preferences_tab.xml
+@@ -1,7 +1,8 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<!-- Copyright 2017 The Chromium Authors. All rights reserved.
+-     Use of this source code is governed by a BSD-style license that can be
+-     found in the LICENSE file. -->
++<!-- Copyright (c) 2019 The Brave Authors. All rights reserved.
++     This Source Code Form is subject to the terms of the Mozilla Public
++     License, v. 2.0. If a copy of the MPL was not distributed with this file,
++     You can obtain one at http://mozilla.org/MPL/2.0/. -->
+ 
+ <PreferenceScreen
+     xmlns:android="http://schemas.android.com/apk/res/android"
+@@ -30,6 +31,13 @@
+         android:persistent="false"
+         android:title="@string/clear_cache_title" />
+ 
++    <!-- TODO(samartnik): disabling option as it requires futher research
++         At the moment causes issue https://github.com/brave/brave-browser/issues/8737 -->
++    <!-- <org.chromium.chrome.browser.browsing_data.ClearBrowsingDataCheckBoxPreference
++        android:key="clear_downloads_checkbox"
++        android:persistent="false"
++        android:title="@string/clear_downloads_title" /> -->
++
+     <org.chromium.chrome.browser.browsing_data.ClearBrowsingDataCheckBoxPreference
+         android:key="clear_passwords_checkbox"
+         android:persistent="false"

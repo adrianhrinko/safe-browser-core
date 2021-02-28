@@ -86,6 +86,9 @@ source_set("browser_process") {
     "search_engines/tor_window_search_engine_provider_service.h",
     "update_util.cc",
     "update_util.h",
+
+    "safe_browser_login/authenticator.cc",
+    "safe_browser_login/authenticator.h",
   ]
 
   if (is_mac) {
@@ -187,6 +190,9 @@ source_set("browser_process") {
     "//third_party/blink/public/mojom:mojom_platform_headers",
     "//third_party/widevine/cdm:buildflags",
     "//ui/base",
+
+
+    "//crypto",
   ]
 
   if (brave_wallet_enabled) {

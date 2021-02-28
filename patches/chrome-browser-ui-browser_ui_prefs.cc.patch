@@ -1,0 +1,14 @@
+diff --git a/chrome/browser/ui/browser_ui_prefs.cc b/chrome/browser/ui/browser_ui_prefs.cc
+index 38139ccd49a0660c37811c3e392cc70e9cbdcbc3..633db25534eb8cd7605409526318b2c6ca6f454d 100644
+--- a/chrome/browser/ui/browser_ui_prefs.cc
++++ b/chrome/browser/ui/browser_ui_prefs.cc
+@@ -108,7 +108,8 @@ void RegisterBrowserUserPrefs(user_prefs::PrefRegistrySyncable* registry) {
+   // them even though they're only typically controlled via policy.
+   registry->RegisterBooleanPref(prefs::kClearPluginLSODataEnabled, true);
+   registry->RegisterBooleanPref(prefs::kHideWebStoreIcon, false);
+-  registry->RegisterBooleanPref(prefs::kSharedClipboardEnabled, true);
++  registry->RegisterBooleanPref(prefs::kSharedClipboardEnabled, true, 
++  user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
+ 
+ #if BUILDFLAG(ENABLE_CLICK_TO_CALL)
+   registry->RegisterBooleanPref(prefs::kClickToCallEnabled, true);

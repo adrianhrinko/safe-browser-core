@@ -324,7 +324,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
 
     }
 
-    private void showFragment(Fragment fragment, Boolean backstack) {
+    public void showFragment(Fragment fragment, Boolean backstack) {
         FragmentTransaction fragmentTransaction = this.getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.coordinator, fragment);
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);

@@ -29,42 +29,34 @@ using base::Base64Encode;
 using crypto::HMAC;
 using crypto::SymmetricKey;
 
-
-namespace {
-
-Profile* GetOriginalProfile() {
-  return ProfileManager::GetActiveUserProfile()->GetOriginalProfile();
-}
-
-}  // namespace
-
 namespace safe_browser_login {
 
-  bool Authenticate(std::string password) {
+  bool Authenticate(std::string passHash, std::string password) {
 
         const size_t kCostParameter = 8192;  // 2^13.
         const size_t kBlockSize = 8;
         const size_t kParallelizationParameter = 11;
         const size_t kMaxMemoryBytes = 32 * 1024 * 1024;  // 32 MiB.
-        const size_t kHashSize = 32;
+        const size_t kHashSizeInBites = 256;
+        const size_t kHashSizeInBytes = kHashSizeInBites / 8;
 
         LOG(INFO) << "Authentication started.";
 
-        std::string passHash= GetOriginalProfile()->GetPrefs()->GetString(kPasswordHash);
         std::string hashDecoded;
+        
         if(!base::Base64Decode(passHash, &hashDecoded)) {
             LOG(ERROR) << "Password hash b64 decoding failed.";
             return false;
         }
 
-
-        std::string salt = hashDecoded.substr(kHashSize);
-        std::string xpectedHash = hashDecoded.substr(0, kHashSize);
+        std::string salt = hashDecoded.substr(kHashSizeInBytes);
+        
+        std::string xpectedHash = hashDecoded.substr(0, kHashSizeInBytes);
 
         std::unique_ptr<SymmetricKey> hash = SymmetricKey::DeriveKeyFromPasswordUsingScrypt(
         SymmetricKey::AES, password, salt, kCostParameter, kBlockSize,
         kParallelizationParameter, kMaxMemoryBytes,
-        kHashSize);
+        kHashSizeInBites);
 
         return xpectedHash == hash->key();
   }

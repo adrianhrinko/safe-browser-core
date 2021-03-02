@@ -24,3 +24,4 @@ android_aar_prebuilt("com_airbnb_android_java") {
   info_path = "libs/com_airbnb_android/com_airbnb_android.info"
   deps = ["//third_party/android_deps:androidx_appcompat_appcompat_java"]
 }
+

@@ -24,6 +24,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private TextView btnConfirm;
     private EditText password;
 
+    private LoginServiceBridge loginService;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +34,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     @Override 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
+
+        loginService = LoginServiceBridge.getInstance();
 
         loaderLayout = (View) rootView.findViewById(R.id.password_loader);
         passwordLayout = (View) rootView.findViewById(R.id.password_form);
@@ -55,20 +59,24 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
     public void tryLogin() {
         String pass = password.getText().toString();
-
         showLoader();
 
-        getActivity().runOnUiThread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
-                boolean isPassValid = LoginServiceBridge.getInstance().authenticate(pass);
-                if (isPassValid) {
-                    closeFragment();
-                } else {
-                    updateOnInvalidPAssword();
-                }             
+                boolean isPassValid = loginService.authenticate(pass);
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isPassValid) {
+                            closeFragment();
+                        } else {
+                            updateOnInvalidPassword();
+                        }             
+                    }
+                });
             }
-        });
+         }).start();
     }
 
     public void showLoader() {
@@ -85,10 +93,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         ((FragmentActivity) getActivity()).getSupportFragmentManager().beginTransaction().remove((Fragment) this).commit();
     }
 
-    public void updateOnInvalidPAssword() {
+    public void updateOnInvalidPassword() {
         hideLoader();
-        detail.setText("Entered password is invalid.");
-
+        detail.setText("Entered password is invalid. Try again, please.");
+        detail.setTextColor(this.getResources().getColor(R.color.colorCritical));
     }
 
 

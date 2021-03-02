@@ -90,6 +90,8 @@ import org.chromium.ui.KeyboardVisibilityDelegate;
 import org.chromium.ui.base.DeviceFormFactor;
 import androidx.fragment.app.Fragment;
 
+import org.chromium.chrome.browser.login.LoginFragment;
+
 import java.io.IOException;
 import java.lang.Runnable;
 import java.util.ArrayList;
@@ -185,8 +187,18 @@ public class BraveSyncScreensPreference extends BravePreferenceFragment
 
     @Override
     public void deviceInfoChanged() {
+        if (isInitialSyncRequired) {
+            BraveActivity mainActivity = BraveActivity.getBraveActivity();
+            if (null != mainActivity) {
+                mainActivity.showFragment(new LoginFragment(), false);
+            }
+            ((FragmentActivity) getActivity()).getSupportFragmentManager().beginTransaction().remove((Fragment) this).commit();
+            return;
+        }
+
         onDevicesAvailable();
     }
+
     boolean deviceInfoObserverSet = false;
 
     @Override
@@ -541,10 +553,42 @@ public class BraveSyncScreensPreference extends BravePreferenceFragment
         }
 
         if (isInitialSyncRequired) {
-            ((FragmentActivity) getActivity()).getSupportFragmentManager().beginTransaction().remove((Fragment) this).commit();
+            closeAndGoToLoginFragment();
         } else {
             setSyncDoneLayout();
         }
+    }
+
+    private void closeAndGoToLoginFragment() {
+
+        if (!deviceInfoObserverSet) {
+            BraveSyncDevices.get().addDeviceInfoChangedListener(this);
+            deviceInfoObserverSet = true;
+        }
+
+
+        if (null != mCameraSourcePreview) {
+            mCameraSourcePreview.stop();
+        }
+        if (null != mScrollViewSyncInitial) {
+            mScrollViewSyncInitial.setVisibility(View.GONE);
+        }
+        if (null != mScrollViewSyncChainCode) {
+            mScrollViewSyncChainCode.setVisibility(View.GONE);
+        }
+        if (null != mScrollViewEnterCodeWords) {
+            mScrollViewEnterCodeWords.setVisibility(View.GONE);
+        }
+        if (null != mScrollViewAddMobileDevice) {
+            mScrollViewAddMobileDevice.setVisibility(View.GONE);
+        }
+        if (null != mScrollViewAddLaptop) {
+            mScrollViewAddLaptop.setVisibility(View.GONE);
+        }
+        if (null != mScrollViewSyncStartChain) {
+            mScrollViewSyncStartChain.setVisibility(View.GONE);
+        }
+
     }
 
     private void setMainSyncText() {

@@ -26,10 +26,11 @@ namespace android {
 
   jboolean JNI_LoginServiceBridge_Authenticate(
       JNIEnv* env,
-      const base::android::JavaParamRef<jstring>& hash) {
+      const base::android::JavaParamRef<jstring>& passHash,
+      const base::android::JavaParamRef<jstring>& password) {
       LOG(INFO) << "Checking password.";
   
-      return safe_browser_login::Authenticate(ConvertJavaStringToUTF8(env, hash));
+      return safe_browser_login::Authenticate(ConvertJavaStringToUTF8(env, passHash), ConvertJavaStringToUTF8(env, password));
     }
 }  // namespace android
 }  // namespace chrome

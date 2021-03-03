@@ -121,8 +121,12 @@ void RegisterProfilePrefsForMigration(
 void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
   brave_shields::BraveShieldsWebContentsObserver::RegisterProfilePrefs(
       registry);
-  
+
+
+  //Safe Browser prefs
   registry->RegisterStringPref(kPasswordHash, "", user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
+  registry->RegisterDictionaryPref(kVPNConfig, user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
+
 
 #if BUILDFLAG(ENABLE_BRAVE_PERF_PREDICTOR)
   brave_perf_predictor::PerfPredictorTabHelper::RegisterProfilePrefs(registry);

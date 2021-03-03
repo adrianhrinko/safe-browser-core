@@ -195,13 +195,24 @@ public class BravePrefServiceBridge {
         return BravePrefServiceBridgeJni.get().getP3ANoticeAcknowledged();
     }
 
-
-    public void setPasswordHash(String hash) {
-        BravePrefServiceBridgeJni.get().setPasswordHash(hash);
-    }
-
     public String getPasswordHash() {
         return BravePrefServiceBridgeJni.get().getPasswordHash();
+    }
+
+    public String getVPNConfigCountry() {
+        return BravePrefServiceBridgeJni.get().getVPNConfigCountry();
+    }
+
+    public String getVPNConfigOVPN() {
+        return BravePrefServiceBridgeJni.get().getVPNConfigOVPN();
+    }
+
+    public String getVPNConfigPassword() {
+        return BravePrefServiceBridgeJni.get().getVPNConfigPassword();
+    }
+
+    public String getVPNConfigUsername() {
+        return BravePrefServiceBridgeJni.get().getVPNConfigUsername();
     }
 
     @NativeMethods
@@ -257,7 +268,11 @@ public class BravePrefServiceBridge {
         boolean getP3ANoticeAcknowledged();
 
         // Safe Browser prefs
-        void setPasswordHash(String hash);
         String getPasswordHash();
+        String getVPNConfigCountry();
+        String getVPNConfigPassword();
+        String getVPNConfigUsername();
+        String getVPNConfigOVPN();
+
     }
 }

@@ -30,6 +30,11 @@
 #include "brave/components/p3a/pref_names.h"
 #endif
 
+#include "base/base64.h"
+
+using base::Base64Decode;
+using base::Base64Encode;
+
 using base::android::ConvertUTF8ToJavaString;
 using base::android::ConvertUTF8ToJavaString;
 using base::android::JavaParamRef;
@@ -215,11 +220,55 @@ jboolean JNI_BravePrefServiceBridge_GetSafetynetCheckFailed(JNIEnv* env) {
   return GetOriginalProfile()->GetPrefs()->GetBoolean(kSafetynetCheckFailed);
 }
 
-void JNI_BravePrefServiceBridge_SetPasswordHash(
-    JNIEnv* env,
-    const base::android::JavaParamRef<jstring>& hash) {
-  LOG(INFO) << "Setting password hash: " << ConvertJavaStringToUTF8(env, hash);
-  GetOriginalProfile()->GetPrefs()->SetString(kPasswordHash, ConvertJavaStringToUTF8(env, hash));
+base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConfigCountry(JNIEnv* env) {
+  auto* dict = GetOriginalProfile()->GetPrefs()->GetDictionary(kVPNConfig);
+  auto* val = dict->FindStringPath("country");
+
+  if (val) {
+    return ConvertUTF8ToJavaString(env, *val); 
+  }
+
+  return NULL;
+}
+
+base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConfigUsername(JNIEnv* env) {
+  auto* dict = GetOriginalProfile()->GetPrefs()->GetDictionary(kVPNConfig);
+  auto* val = dict->FindStringPath("username");
+
+  if (val) {
+    return ConvertUTF8ToJavaString(env, *val); 
+  }
+
+  return NULL;
+}
+
+base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConfigPassword(JNIEnv* env) {
+  auto* dict = GetOriginalProfile()->GetPrefs()->GetDictionary(kVPNConfig);
+  auto* val = dict->FindStringPath("password");
+
+  if (val) {
+    return ConvertUTF8ToJavaString(env, *val); 
+  }
+
+  return NULL;
+}
+
+base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConfigOVPN(JNIEnv* env) {
+  auto* dict = GetOriginalProfile()->GetPrefs()->GetDictionary(kVPNConfig);
+  auto* val = dict->FindStringPath("ovpn");
+
+  if (val) {
+    std::string valDecoded;
+        
+    if(!base::Base64Decode(*val, &valDecoded)) {
+      LOG(ERROR) << "OVPN b64 decoding failed.";
+      return NULL;
+    }
+
+    return ConvertUTF8ToJavaString(env, valDecoded); 
+  }
+
+  return NULL;
 }
 
 base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetPasswordHash(JNIEnv* env) {

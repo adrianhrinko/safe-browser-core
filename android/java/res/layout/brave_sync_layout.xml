@@ -15,6 +15,11 @@
     android:gravity="center"
     android:background="@color/brave_sync_bg_color" >
 
+    <include
+            android:visibility="gone"
+            android:id="@+id/sync_loader"
+            layout="@layout/loader_layout"/>
+
     <ScrollView android:id="@+id/view_sync_initial"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

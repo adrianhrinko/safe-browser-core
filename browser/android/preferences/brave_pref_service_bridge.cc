@@ -7,6 +7,7 @@
 
 #include "build/build_config.h"
 #include "base/android/jni_string.h"
+#include "base/json/json_reader.h"
 #include "brave/common/pref_names.h"
 #include "brave/components/brave_perf_predictor/browser/buildflags.h"
 #include "brave/components/brave_referrals/common/pref_names.h"
@@ -220,55 +221,136 @@ jboolean JNI_BravePrefServiceBridge_GetSafetynetCheckFailed(JNIEnv* env) {
   return GetOriginalProfile()->GetPrefs()->GetBoolean(kSafetynetCheckFailed);
 }
 
-base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConfigCountry(JNIEnv* env) {
-  auto* dict = GetOriginalProfile()->GetPrefs()->GetDictionary(kVPNConfig);
-  auto* val = dict->FindStringPath("country");
 
-  if (val) {
-    return ConvertUTF8ToJavaString(env, *val); 
+
+base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConfigCountry(JNIEnv* env) {
+  std::string json = GetOriginalProfile()->GetPrefs()->GetString(kVPNConfig);
+
+  std::string jsonDecoded;
+
+  if(!base::Base64Decode(json, &jsonDecoded)) {
+    LOG(ERROR) << "JSON b64 decoding failed.";
+    return NULL;
   }
 
-  return NULL;
+      LOG(INFO) << jsonDecoded;
+
+
+  base::Optional<base::Value> value = base::JSONReader::Read(jsonDecoded);
+
+  if (!value) {
+    LOG(ERROR) << "Could not parse json";
+    return NULL;
+  }
+
+  base::DictionaryValue* dictionary = nullptr;
+  if (!value->GetAsDictionary(&dictionary)) {
+    LOG(ERROR) << "JSON is not dict";
+    return NULL;
+  }
+
+  auto* country = dictionary->FindStringPath("country");
+  if (!country) {
+    LOG(ERROR) << "JSON path: country ... could not be found";
+    return NULL;
+  }
+
+  return ConvertUTF8ToJavaString(env, *country); 
+
 }
 
 base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConfigUsername(JNIEnv* env) {
-  auto* dict = GetOriginalProfile()->GetPrefs()->GetDictionary(kVPNConfig);
-  auto* val = dict->FindStringPath("username");
+  std::string json = GetOriginalProfile()->GetPrefs()->GetString(kVPNConfig);
 
-  if (val) {
-    return ConvertUTF8ToJavaString(env, *val); 
+  std::string jsonDecoded;
+
+  if(!base::Base64Decode(json, &jsonDecoded)) {
+    LOG(ERROR) << "JSON b64 decoding failed.";
+    return NULL;
   }
 
-  return NULL;
+  base::Optional<base::Value> value = base::JSONReader::Read(jsonDecoded);
+
+  if (!value || !value->is_dict()) {
+    return NULL;
+  }
+
+  base::DictionaryValue* dictionary = nullptr;
+  if (!value->GetAsDictionary(&dictionary)) {
+    return NULL;
+  }
+
+  auto* username = dictionary->FindStringPath("username");
+  if (!username) {
+    return NULL;
+  }
+
+  return ConvertUTF8ToJavaString(env, *username); 
 }
 
 base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConfigPassword(JNIEnv* env) {
-  auto* dict = GetOriginalProfile()->GetPrefs()->GetDictionary(kVPNConfig);
-  auto* val = dict->FindStringPath("password");
+  std::string json = GetOriginalProfile()->GetPrefs()->GetString(kVPNConfig);
 
-  if (val) {
-    return ConvertUTF8ToJavaString(env, *val); 
+  std::string jsonDecoded;
+
+  if(!base::Base64Decode(json, &jsonDecoded)) {
+    LOG(ERROR) << "JSON b64 decoding failed.";
+    return NULL;
   }
 
-  return NULL;
+  base::Optional<base::Value> value = base::JSONReader::Read(jsonDecoded);
+
+    if (!value || !value->is_dict()) {
+    return NULL;
+  }
+
+  base::DictionaryValue* dictionary = nullptr;
+  if (!value->GetAsDictionary(&dictionary)) {
+    return NULL;
+  }
+
+  auto* password = dictionary->FindStringPath("password");
+  if (!password) {
+    return NULL;
+  }
+
+  return ConvertUTF8ToJavaString(env, *password); 
 }
 
 base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConfigOVPN(JNIEnv* env) {
-  auto* dict = GetOriginalProfile()->GetPrefs()->GetDictionary(kVPNConfig);
-  auto* val = dict->FindStringPath("ovpn");
+  std::string json = GetOriginalProfile()->GetPrefs()->GetString(kVPNConfig);
 
-  if (val) {
-    std::string valDecoded;
-        
-    if(!base::Base64Decode(*val, &valDecoded)) {
-      LOG(ERROR) << "OVPN b64 decoding failed.";
-      return NULL;
-    }
+  std::string jsonDecoded;
 
-    return ConvertUTF8ToJavaString(env, valDecoded); 
+  if(!base::Base64Decode(json, &jsonDecoded)) {
+    LOG(ERROR) << "JSON b64 decoding failed.";
+    return NULL;
   }
 
-  return NULL;
+  base::Optional<base::Value> value = base::JSONReader::Read(jsonDecoded);
+
+    if (!value || !value->is_dict()) {
+    return NULL;
+  }
+
+  base::DictionaryValue* dictionary = nullptr;
+  if (!value->GetAsDictionary(&dictionary)) {
+    return NULL;
+  }
+
+  auto* ovpn = dictionary->FindStringPath("ovpn");
+  if (!ovpn) {
+    return NULL;
+  }
+
+  std::string ovpnDecoded;
+        
+  if(!base::Base64Decode(*ovpn, &ovpnDecoded)) {
+    LOG(ERROR) << "OVPN b64 decoding failed.";
+    return NULL;
+  }
+
+  return ConvertUTF8ToJavaString(env, ovpnDecoded); 
 }
 
 base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetPasswordHash(JNIEnv* env) {

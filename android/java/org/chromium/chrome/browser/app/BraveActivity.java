@@ -9,20 +9,24 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -91,8 +95,15 @@ import org.chromium.components.embedder_support.util.UrlUtilities;
 import org.chromium.components.search_engines.TemplateUrl;
 import org.chromium.components.user_prefs.UserPrefs;
 import org.chromium.ui.widget.Toast;
+import org.chromium.chrome.browser.vpn.VPNFragment;
 import androidx.fragment.app.Fragment;
 import org.chromium.chrome.browser.BraveSyncWorker;
+
+import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -100,11 +111,27 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import de.blinkt.openvpn.OpenVpnApi;
+import de.blinkt.openvpn.core.OpenVPNService;
+import de.blinkt.openvpn.core.OpenVPNThread;
+import de.blinkt.openvpn.core.VpnStatus;
+
 /**
  * Brave's extension for ChromeActivity
  */
 @JNINamespace("chrome::android")
 public abstract class BraveActivity<C extends ChromeActivityComponent> extends ChromeActivity {
+
+    private OpenVPNThread vpnThread = new OpenVPNThread();
+    private OpenVPNService vpnService = new OpenVPNService();
+    private boolean vpnStarted = false;
+    private boolean loggedIn = false;
+
+    public static final String LOGIN_FRAGMENT_TAG = "LOGIN_FRAGMENT_TAG";
+    public static final String VPN_FRAGMENT_TAG = "VPN_FRAGMENT_TAG";
+
+
+
     public static final int SITE_BANNER_REQUEST_CODE = 33;
     public static final int VERIFY_WALLET_ACTIVITY_REQUEST_CODE = 34;
     public static final int USER_WALLET_ACTIVITY_REQUEST_CODE = 35;
@@ -198,6 +225,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     @Override
     public void onResume() {
         super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(vpnReceiver, new IntentFilter("connectionState"));
 
         Tab tab = getActivityTab();
         if (tab == null)
@@ -211,6 +239,8 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     @Override
     public void onPause() {
         super.onPause();
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(vpnReceiver);
 
         Tab tab = getActivityTab();
         if (tab == null)
@@ -316,22 +346,191 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
         }
 
         if (!getBraveSyncWorker().IsFirstSetupComplete()) {
-            showFragment(BraveSyncScreensPreference.newInstance(true), false);
+            showFragment(BraveSyncScreensPreference.newInstance(true), null);
         } else {
-            showFragment(new LoginFragment(), false);
-        }
-        
+            if(!loggedIn) {
+                showFragment(new LoginFragment(), LOGIN_FRAGMENT_TAG);
+            }
+        }     
 
     }
 
-    public void showFragment(Fragment fragment, Boolean backstack) {
+
+
+    public void setLoggedIn() {
+        loggedIn = true;
+    }
+
+
+    public Intent getVPNPermissionIntent() {
+        return vpnService.prepare(ContextUtils.getApplicationContext());
+    }
+
+    
+    /**
+     * Get service status
+     */
+    public void checkVPNRunning() {
+        setStatus(vpnService.getStatus());
+    }
+
+    public boolean doesVPNStarted(){
+        return vpnStarted;
+    }
+
+    /**
+     * Start the VPN
+     */
+    public void startVpn() {    
+        Activity thisActivity = this;   
+        
+        String country = BravePrefServiceBridge.getInstance().getVPNConfigCountry();
+        String ovpn = BravePrefServiceBridge.getInstance().getVPNConfigOVPN();
+        String username = BravePrefServiceBridge.getInstance().getVPNConfigUsername();
+        String password = BravePrefServiceBridge.getInstance().getVPNConfigPassword();
+
+        if (country == null || ovpn == null || username == null || password == null) {
+            Log.e("startVpn", "VPN config is corrupted!");
+            return;
+        }
+
+        Log.d("startVpn", "VPN is starting");
+
+        try {
+            VpnStatus.initLogCache(thisActivity.getCacheDir());
+            OpenVpnApi.startVpn(ContextUtils.getApplicationContext(), ovpn, country, username, password);
+            Log.d("startVpn", "VPN service started successfuly.");
+
+
+            vpnStarted = true;
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+    }
+        
+    /**
+     * Stop vpn
+     */
+    public void stopVpn() {
+        try {
+            vpnThread.stop();
+            vpnStarted = false;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    BroadcastReceiver vpnReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            try {
+                boolean shouldLogout = intent.getBooleanExtra("logoutRequired", false);
+
+                if (shouldLogout) {
+                    loggedIn = false;
+                    showFragment(new LoginFragment(), LOGIN_FRAGMENT_TAG);
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                setStatus(intent.getStringExtra("state"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    public void setStatus(String connectionState) {
+        if (connectionState == null) return;
+        showToast(connectionState);
+        switch (connectionState) {
+            case "DISCONNECTED":
+                vpnStarted = false;
+
+                if (loggedIn) {
+                    showFragment(new VPNFragment(), VPN_FRAGMENT_TAG);
+                }
+
+                break;
+            case "CONNECTED":
+                vpnStarted = true;
+                closeFagmentWithTag(VPN_FRAGMENT_TAG);
+                break;
+            case "WAIT":
+                break;
+            case "AUTH":
+                break;
+            case "RECONNECTING":
+                break;
+            case "NONETWORK":
+                break;
+        }
+
+    }
+
+    @Override
+    public void onStop() {
+        Log.i("BraveActivity", "Stoppin BraveActivity!");
+        if (vpnStarted) {
+            stopVpn();
+        }
+        loggedIn = false;
+
+        super.onStop();
+    }
+    
+
+
+    /**
+     * Show toast message
+     * @param message: toast message
+     */
+    public void showToast(String message) {
+        Toast.makeText(ContextUtils.getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+
+    public boolean getInternetStatus() {
+        ConnectivityManager cm = (ConnectivityManager) ContextUtils.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo nInfo = cm.getActiveNetworkInfo();
+
+        boolean isConnected = nInfo != null && nInfo.isConnectedOrConnecting();
+        return isConnected;
+    }
+
+
+    public void switchFragment(Fragment from, Fragment to, String tag) {
+        showFragment(to, tag);
+        closeFragment(from);
+    }
+
+    public void closeFragment(Fragment fragment) {
+        this.getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+    }
+
+    public void closeFagmentWithTag(String tag) {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
+        if (fragment != null && fragment.isVisible()) {
+            closeFragment(fragment);
+        }
+    }
+
+    public void showFragment(Fragment fragment, String tag) {
         FragmentTransaction fragmentTransaction = this.getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.coordinator, fragment);
+
+        if (tag == null) {
+            fragmentTransaction.replace(R.id.coordinator, fragment);
+        } else {
+            fragmentTransaction.replace(R.id.coordinator, fragment, tag);
+        }
+
         fragmentTransaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
 
-        if (backstack) {
-            fragmentTransaction.addToBackStack(null);
-        }
+        fragmentTransaction.addToBackStack(null);
 
         fragmentTransaction.commit();
     }

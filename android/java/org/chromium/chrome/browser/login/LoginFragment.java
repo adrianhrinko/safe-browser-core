@@ -13,6 +13,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.app.Activity;
 import org.chromium.chrome.browser.login.LoginServiceBridge;
+import org.chromium.chrome.browser.app.BraveActivity;
+import org.chromium.chrome.browser.vpn.VPNFragment;
+import android.content.Intent;
+import android.content.IntentFilter;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public class LoginFragment extends Fragment implements View.OnClickListener{
@@ -24,7 +30,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     private TextView btnConfirm;
     private EditText password;
 
-    private LoginServiceBridge loginService;
+    private BraveActivity mainActivity;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -35,7 +42,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_login, container, false);
 
-        loginService = LoginServiceBridge.getInstance();
 
         loaderLayout = (View) rootView.findViewById(R.id.password_loader);
         passwordLayout = (View) rootView.findViewById(R.id.password_form);
@@ -45,6 +51,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         detail.setText("Enter your password, please.");
         btnConfirm = (TextView) rootView.findViewById(R.id.loginButton);
         btnConfirm.setOnClickListener(this);
+        
+        mainActivity = BraveActivity.getBraveActivity();
+
 
         return rootView;
     }
@@ -59,8 +68,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
     public void tryLogin() {
         String pass = password.getText().toString();
-        showLoader();
+        LoginServiceBridge loginService = LoginServiceBridge.getInstance();
 
+        showLoader();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -90,7 +100,9 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     }
 
     public void closeFragment() {
-        ((FragmentActivity) getActivity()).getSupportFragmentManager().beginTransaction().remove((Fragment) this).commit();
+        if (null != mainActivity) {
+            mainActivity.switchFragment(this, new VPNFragment(), mainActivity.VPN_FRAGMENT_TAG);
+        }    
     }
 
     public void updateOnInvalidPassword() {
@@ -98,6 +110,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
         detail.setText("Entered password is invalid. Try again, please.");
         detail.setTextColor(this.getResources().getColor(R.color.colorCritical));
     }
+
 
 
 }

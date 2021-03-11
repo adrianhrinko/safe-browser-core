@@ -46,4 +46,6 @@ public class LoginServiceBridge {
     interface Natives {
         boolean authenticate(String passHash, String password);
     }
+
+    
 }

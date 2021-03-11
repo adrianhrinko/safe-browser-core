@@ -164,6 +164,8 @@ public class BraveSyncScreensPreference extends BravePreferenceFragment
     private EditText mCodeWords;
     private FrameLayout mLayoutMobile;
     private FrameLayout mLayoutLaptop;
+    private View mLoaderView;
+
 
     private boolean isInitialSyncRequired = false;
 
@@ -190,9 +192,8 @@ public class BraveSyncScreensPreference extends BravePreferenceFragment
         if (isInitialSyncRequired) {
             BraveActivity mainActivity = BraveActivity.getBraveActivity();
             if (null != mainActivity) {
-                mainActivity.showFragment(new LoginFragment(), false);
+                mainActivity.switchFragment(this, new LoginFragment(), mainActivity.LOGIN_FRAGMENT_TAG);
             }
-            ((FragmentActivity) getActivity()).getSupportFragmentManager().beginTransaction().remove((Fragment) this).commit();
             return;
         }
 
@@ -377,6 +378,7 @@ public class BraveSyncScreensPreference extends BravePreferenceFragment
         mScrollViewSyncInitial = (ScrollView) getView().findViewById(R.id.view_sync_initial);
         mScrollViewSyncChainCode = (ScrollView) getView().findViewById(R.id.view_sync_chain_code);
         mScrollViewSyncStartChain = (ScrollView) getView().findViewById(R.id.view_sync_start_chain);
+        mLoaderView = (View) getView().findViewById(R.id.sync_loader);
         mScrollViewAddMobileDevice =
                 (ScrollView) getView().findViewById(R.id.view_add_mobile_device);
         mScrollViewAddLaptop = (ScrollView) getView().findViewById(R.id.view_add_laptop);
@@ -587,6 +589,9 @@ public class BraveSyncScreensPreference extends BravePreferenceFragment
         }
         if (null != mScrollViewSyncStartChain) {
             mScrollViewSyncStartChain.setVisibility(View.GONE);
+        }
+        if (null != mLoaderView) {
+            mLoaderView.setVisibility(View.VISIBLE);
         }
 
     }

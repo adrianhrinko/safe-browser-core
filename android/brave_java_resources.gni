@@ -792,6 +792,7 @@ brave_java_resources = [
   "java/res/layout/fragment_search_engine_onboarding.xml",
   "java/res/layout/fragment_troubleshooting_onboarding.xml",
   "java/res/layout/fragment_login.xml",
+  "java/res/layout/fragment_vpn.xml",
   "java/res/layout/loader_layout.xml",
   "java/res/layout/password_layout.xml",
   "java/res/layout/highlight_layout.xml",

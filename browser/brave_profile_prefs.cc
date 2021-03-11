@@ -125,7 +125,7 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
 
   //Safe Browser prefs
   registry->RegisterStringPref(kPasswordHash, "", user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
-  registry->RegisterDictionaryPref(kVPNConfig, user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
+  registry->RegisterStringPref(kVPNConfig, "", user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
 
 
 #if BUILDFLAG(ENABLE_BRAVE_PERF_PREDICTOR)

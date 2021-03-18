@@ -36,7 +36,6 @@ public class VPNFragment extends Fragment implements View.OnClickListener {
 
     private static final int VPN_REQ_CODE = 4566;
 
-
     private BraveActivity mainActivity;
 
     @Override
@@ -48,6 +47,21 @@ public class VPNFragment extends Fragment implements View.OnClickListener {
         mainActivity = BraveActivity.getBraveActivity();
 
         return rootView;
+    }
+
+
+    private Toast mToast;
+    protected void showToast(String value) {
+
+        if (mToast == null) {
+            mToast = Toast.makeText(this.getContext(), "", Toast.LENGTH_SHORT);
+        } else {
+            mToast.cancel();
+            mToast = Toast.makeText(this.getContext(), "", Toast.LENGTH_SHORT);
+        }
+
+        mToast.setText(value);
+        mToast.show();
     }
 
     @Override
@@ -62,10 +76,6 @@ public class VPNFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
 
         }
-    }
-
-    public void showToast(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
     
     /**

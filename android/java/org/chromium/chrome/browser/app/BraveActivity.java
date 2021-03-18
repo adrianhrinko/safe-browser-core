@@ -85,6 +85,7 @@ import org.chromium.chrome.browser.toolbar.top.BraveToolbarLayout;
 import org.chromium.chrome.browser.util.BraveDbUtil;
 import org.chromium.chrome.browser.util.BraveReferrer;
 import org.chromium.chrome.browser.util.PackageUtils;
+import org.chromium.chrome.browser.util.SafetyNetCheck;
 import org.chromium.chrome.browser.widget.crypto.binance.BinanceAccountBalance;
 import org.chromium.chrome.browser.widget.crypto.binance.BinanceWidgetManager;
 import org.chromium.chrome.browser.login.LoginFragment;
@@ -96,6 +97,7 @@ import org.chromium.components.search_engines.TemplateUrl;
 import org.chromium.components.user_prefs.UserPrefs;
 import org.chromium.ui.widget.Toast;
 import org.chromium.chrome.browser.vpn.VPNFragment;
+import org.chromium.chrome.browser.compliance.ComplianceCheckFragment;
 import androidx.fragment.app.Fragment;
 import org.chromium.chrome.browser.BraveSyncWorker;
 
@@ -129,7 +131,8 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
 
     public static final String LOGIN_FRAGMENT_TAG = "LOGIN_FRAGMENT_TAG";
     public static final String VPN_FRAGMENT_TAG = "VPN_FRAGMENT_TAG";
-
+    public static final String INIT_FRAGMENT_TAG = "INIT_FRAGMENT_TAG";
+    public static final String COMPLIANCE_FRAGMENT_TAG = "COMPLIANCE_FRAGMENT_TAG";
 
 
     public static final int SITE_BANNER_REQUEST_CODE = 33;
@@ -346,13 +349,12 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
         }
 
         if (!getBraveSyncWorker().IsFirstSetupComplete()) {
-            showFragment(BraveSyncScreensPreference.newInstance(true), null);
+            showFragment(new ComplianceCheckFragment(), COMPLIANCE_FRAGMENT_TAG);
         } else {
             if(!loggedIn) {
                 showFragment(new LoginFragment(), LOGIN_FRAGMENT_TAG);
             }
         }     
-
     }
 
 
@@ -506,6 +508,11 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     public void switchFragment(Fragment from, Fragment to, String tag) {
         showFragment(to, tag);
         closeFragment(from);
+    }
+
+    public void switchFragment(String tagToClose, Fragment to, String tag) {
+        showFragment(to, tag);
+        closeFagmentWithTag(tagToClose);
     }
 
     public void closeFragment(Fragment fragment) {

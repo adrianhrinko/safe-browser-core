@@ -13,11 +13,15 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+
 import com.google.android.gms.safetynet.SafetyNet;
 import com.google.android.gms.safetynet.SafetyNetApi;
+import com.google.android.gms.safetynet.SafetyNetApi.*;
 import com.google.android.gms.safetynet.SafetyNetClient;
+import com.google.android.gms.safetynet.HarmfulAppsData;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import org.json.JSONException;
@@ -35,6 +39,7 @@ import java.security.SecureRandom;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.regex.Pattern;
+import java.util.List;
 
 /**
  * Utility class for providing additional safety checks.
@@ -199,4 +204,67 @@ public class SafetyNetCheck {
     private native void nativeclientAttestationResult(long nativeSafetyNetCheck,
             boolean tokenReceived, String resultString, boolean attestationPassed);
     private native String nativeGetApiKey();
+
+    public static void performSafetyNetAppScan(Callback<Boolean> safetyNetCheckCallback) {
+        SafetyNetCheck safetyNet = new SafetyNetCheck(safetyNetCheckCallback);
+        safetyNet.appsAttestation();
+    }
+
+    private void appsAttestation() {
+        SafetyNetClient client = SafetyNet.getClient(ContextUtils.getApplicationContext());
+        client.enableVerifyApps()
+        .addOnCompleteListener(new OnCompleteListener<VerifyAppsUserResponse>() {
+            @Override
+            public void onComplete(Task<VerifyAppsUserResponse> task) {
+                if (task.isSuccessful()) {
+                    VerifyAppsUserResponse result = task.getResult();
+                    if (result.isVerifyAppsEnabled()) {
+                        checkApps(client);
+                    } else {
+                        appsAttestationResult(false, null);
+                    }
+                } else {
+                    Log.e("MY_APP_TAG", "A general error occurred.");
+                }
+            }
+        });
+    }
+
+    private void checkApps(SafetyNetClient client) {
+        client.listHarmfulApps()
+        .addOnCompleteListener(new OnCompleteListener<HarmfulAppsResponse>() {
+            @Override
+            public void onComplete(Task<HarmfulAppsResponse> task) {
+                Log.d(TAG, "Received listHarmfulApps() result");
+    
+                if (task.isSuccessful()) {
+                    HarmfulAppsResponse result = task.getResult();
+                    long scanTimeMs = result.getLastScanTimeMs();
+    
+                    List<HarmfulAppsData> appList = result.getHarmfulAppsList();
+                    appsAttestationResult(true, appList);
+                } else {
+                    appsAttestationResult(false, null);
+                }
+            }
+        });
+    }
+    
+    private void appsAttestationResult(Boolean taskSuccessful, List<HarmfulAppsData> harmfulApps){
+        if (taskSuccessful) {
+            if (harmfulApps.isEmpty()) {
+                if (mSafetyNetCheckCallback != null) {
+                    mSafetyNetCheckCallback.onResult(true);
+                }
+            } else {
+                if (mSafetyNetCheckCallback != null) {
+                    mSafetyNetCheckCallback.onResult(false);
+                }
+            }
+        } else {
+            if (mSafetyNetCheckCallback != null) {
+                mSafetyNetCheckCallback.onResult(null);
+            }
+        }
+    }
 }

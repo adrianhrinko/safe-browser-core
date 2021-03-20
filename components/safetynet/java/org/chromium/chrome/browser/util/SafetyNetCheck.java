@@ -40,6 +40,7 @@ import java.util.Calendar;
 import java.util.Random;
 import java.util.regex.Pattern;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Utility class for providing additional safety checks.
@@ -57,11 +58,18 @@ public class SafetyNetCheck {
 
     private static final long TEN_DAYS = 10 * 24 * 60 * 60 * 1000;
 
+    private List<HarmfulAppsData> harmfulApps;
+
     private long mNativeSafetyNetCheck;
     private Callback<Boolean> mSafetyNetCheckCallback;
 
     private SafetyNetCheck(long staticSafetyNetCheck) {
         mNativeSafetyNetCheck = staticSafetyNetCheck;
+        mSafetyNetCheckCallback = null;
+    }
+
+    public SafetyNetCheck() {
+        mNativeSafetyNetCheck = 1;
         mSafetyNetCheckCallback = null;
     }
 
@@ -205,9 +213,9 @@ public class SafetyNetCheck {
             boolean tokenReceived, String resultString, boolean attestationPassed);
     private native String nativeGetApiKey();
 
-    public static void performSafetyNetAppScan(Callback<Boolean> safetyNetCheckCallback) {
-        SafetyNetCheck safetyNet = new SafetyNetCheck(safetyNetCheckCallback);
-        safetyNet.appsAttestation();
+    public void performSafetyNetAppScan(Callback<Boolean> safetyNetCheckCallback) {
+        this.mSafetyNetCheckCallback = safetyNetCheckCallback;
+        this.appsAttestation();
     }
 
     private void appsAttestation() {
@@ -224,7 +232,7 @@ public class SafetyNetCheck {
                         appsAttestationResult(false, null);
                     }
                 } else {
-                    Log.e("MY_APP_TAG", "A general error occurred.");
+                    appsAttestationResult(false, null);
                 }
             }
         });
@@ -235,7 +243,6 @@ public class SafetyNetCheck {
         .addOnCompleteListener(new OnCompleteListener<HarmfulAppsResponse>() {
             @Override
             public void onComplete(Task<HarmfulAppsResponse> task) {
-                Log.d(TAG, "Received listHarmfulApps() result");
     
                 if (task.isSuccessful()) {
                     HarmfulAppsResponse result = task.getResult();
@@ -249,6 +256,13 @@ public class SafetyNetCheck {
             }
         });
     }
+
+    public List<HarmfulAppsData> getDetectedHarmfulApps() {
+        if (this.harmfulApps != null) {
+            return new ArrayList<HarmfulAppsData>(this.harmfulApps);
+        }
+        return new ArrayList<HarmfulAppsData>();
+    }
     
     private void appsAttestationResult(Boolean taskSuccessful, List<HarmfulAppsData> harmfulApps){
         if (taskSuccessful) {
@@ -258,6 +272,7 @@ public class SafetyNetCheck {
                 }
             } else {
                 if (mSafetyNetCheckCallback != null) {
+                    this.harmfulApps = harmfulApps;
                     mSafetyNetCheckCallback.onResult(false);
                 }
             }

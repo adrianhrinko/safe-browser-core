@@ -34,6 +34,8 @@ public class ComplianceCheckFragment extends Fragment implements View.OnClickLis
     private View failureLayout;
 
     private TextView detail;
+    private TextView closeButton;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,9 +47,14 @@ public class ComplianceCheckFragment extends Fragment implements View.OnClickLis
         failureLayout = (View) rootView.findViewById(R.id.complianceCheckLayout);
 
         detail = (TextView) rootView.findViewById(R.id.complianceCheckDetail);
+        closeButton = (TextView) rootView.findViewById(R.id.closeAppButton);
+
 
         mainActivity = BraveActivity.getBraveActivity();
         thisFragment = this;
+
+        closeButton.setOnClickListener(this);
+
 
         return rootView;
     }
@@ -75,8 +82,8 @@ public class ComplianceCheckFragment extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
         if (R.id.closeAppButton == v.getId()) {
+            showToast("Closing the app...");
             mainActivity.finishAndRemoveTask();
-            return;
         }
 
     }

@@ -6,7 +6,8 @@
 #include "brave/components/sync_device_info/brave_device_info.h"
 
 #define BRAVE_MAKE_LOCAL_DEVICE_SPECIFICS \
-  specifics->mutable_brave_fields()->set_is_self_delete_supported(true);
+  specifics->mutable_brave_fields()->set_is_self_delete_supported(true); \
+  specifics->mutable_brave_fields()->set_audit_logs("");
 
 #include "../../../../components/sync_device_info/device_info_sync_bridge.cc"
 
@@ -45,7 +46,10 @@ std::unique_ptr<BraveDeviceInfo> BraveSpecificsToModel(
       data_types,
       specifics.has_brave_fields() &&
           specifics.brave_fields().has_is_self_delete_supported() &&
-          specifics.brave_fields().is_self_delete_supported());
+          specifics.brave_fields().is_self_delete_supported(),
+      specifics.has_brave_fields() &&
+          specifics.brave_fields().has_audit_logs() ?
+          specifics.brave_fields().audit_logs() : "");
 }
 
 }  // namespace

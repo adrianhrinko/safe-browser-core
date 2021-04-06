@@ -12,6 +12,7 @@ VISIT(brave_fields);
 #define BRAVE_VISIT_PROTO_FIELDS_BRAVE_SPECIFIC_FIELD                  \
 VISIT_PROTO_FIELDS(const sync_pb::BraveSpecificFields& proto) {        \
   VISIT(is_self_delete_supported);                                     \
+  VISIT(audit_logs);                                     \
 }
 
 #include "../../../../../components/sync/protocol/proto_visitors.h"

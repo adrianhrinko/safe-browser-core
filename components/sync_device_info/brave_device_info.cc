@@ -22,7 +22,8 @@ BraveDeviceInfo::BraveDeviceInfo(
     const base::Optional<DeviceInfo::SharingInfo>& sharing_info,
     const std::string& fcm_registration_token,
     const ModelTypeSet& interested_data_types,
-    bool is_self_delete_supported)
+    bool is_self_delete_supported,
+    const std::string& audit_logs)
     : DeviceInfo(guid,
                  client_name,
                  chrome_version,
@@ -37,7 +38,8 @@ BraveDeviceInfo::BraveDeviceInfo(
                  sharing_info,
                  fcm_registration_token,
                  interested_data_types),
-      is_self_delete_supported_(is_self_delete_supported) {}
+      is_self_delete_supported_(is_self_delete_supported),
+      audit_logs_(audit_logs) {}
 
 bool BraveDeviceInfo::is_self_delete_supported() const {
   return is_self_delete_supported_;
@@ -46,6 +48,15 @@ bool BraveDeviceInfo::is_self_delete_supported() const {
 void BraveDeviceInfo::set_is_self_delete_supported(
     bool is_self_delete_supported) {
   is_self_delete_supported_ = is_self_delete_supported;
+}
+
+const std::string& BraveDeviceInfo::get_audit_logs() const {
+  return audit_logs_;
+}
+
+void BraveDeviceInfo::set_audit_logs(
+    const std::string& audit_logs) {
+  audit_logs_ = audit_logs;
 }
 
 }  // namespace syncer

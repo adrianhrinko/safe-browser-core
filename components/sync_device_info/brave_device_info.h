@@ -32,14 +32,18 @@ class BraveDeviceInfo : public DeviceInfo {
                   const base::Optional<DeviceInfo::SharingInfo>& sharing_info,
                   const std::string& fcm_registration_token,
                   const ModelTypeSet& interested_data_types,
-                  bool is_self_delete_supported);
+                  bool is_self_delete_supported,
+                  const std::string& audit_logs);
   ~BraveDeviceInfo() override {}
 
   bool is_self_delete_supported() const;
   void set_is_self_delete_supported(bool is_self_delete_supported);
+  const std::string& get_audit_logs() const;
+  void set_audit_logs(const std::string& audit_logs);
 
  private:
   bool is_self_delete_supported_;
+  std::string audit_logs_;
 
   DISALLOW_COPY_AND_ASSIGN(BraveDeviceInfo);
 };

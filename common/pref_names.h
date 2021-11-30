@@ -8,6 +8,8 @@
 
 #include "build/build_config.h"
 #include "components/gcm_driver/gcm_buildflags.h"
+extern const char kMinBrowserVersion[];
+extern const char kMinAndroidVersion[];
 extern const char kPasswordHash[];
 extern const char kVPNConfig[];
 extern const char kAdsBlocked[];

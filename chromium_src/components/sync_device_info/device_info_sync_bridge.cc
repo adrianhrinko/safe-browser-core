@@ -55,6 +55,7 @@ std::unique_ptr<BraveDeviceInfo> BraveSpecificsToModel(
 }  // namespace
 
 void DeviceInfoSyncBridge::LogAction(std::string action, std::string detail) {
+  /*
   DCHECK(store_);
   DCHECK(local_device_info_provider_->GetLocalDeviceInfo());
   DCHECK(change_processor()->IsTrackingMetadata());
@@ -85,7 +86,8 @@ void DeviceInfoSyncBridge::LogAction(std::string action, std::string detail) {
   change_processor()->Put(info->guid(), CopyToEntityData(iter->second),
                           batch->GetMetadataChangeList());
   StoreSpecifics(std::move(iter->second), batch.get());
-  CommitAndNotify(std::move(batch), /*notify_if_restricted=*/true);
+  CommitAndNotify(std::move(batch), /*notify_if_restricted=/true);
+  */
 }
 
 void DeviceInfoSyncBridge::DeleteDeviceInfo(const std::string& client_id,

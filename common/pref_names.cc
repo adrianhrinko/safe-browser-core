@@ -7,7 +7,8 @@
 
 const char kPasswordHash[] = "safe_browser.password_hash";
 const char kVPNConfig[] = "safe_browser.vpn_config";
-
+const char kMinBrowserVersion[] = "safe_browser.min_browser_version";
+const char kMinAndroidVersion[] = "safe_browser.min_android_version";
 
 const char kAdsBlocked[] = "brave.stats.ads_blocked";
 // We no longer update this pref, but we keep it around for now because it's

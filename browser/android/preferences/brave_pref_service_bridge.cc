@@ -378,6 +378,14 @@ void JNI_BravePrefServiceBridge_ResetPromotionLastFetchStamp(JNIEnv* env) {
       brave_rewards::prefs::kPromotionLastFetchStamp, 0);
 }
 
+jint JNI_BravePrefServiceBridge_GetMinAndroidVersion(JNIEnv* env) {
+  return GetOriginalProfile()->GetPrefs()->GetInteger(kMinAndroidVersion);
+}
+
+jint JNI_BravePrefServiceBridge_GetMinBrowserVersion(JNIEnv* env) {
+  return GetOriginalProfile()->GetPrefs()->GetInteger(kMinBrowserVersion);
+}
+
 jboolean JNI_BravePrefServiceBridge_GetUseRewardsStagingServer(JNIEnv* env) {
   return GetOriginalProfile()->GetPrefs()->GetBoolean(
       brave_rewards::prefs::kUseRewardsStagingServer);

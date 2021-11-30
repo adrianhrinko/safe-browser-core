@@ -26,6 +26,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 
 import androidx.fragment.app.FragmentManager;
@@ -228,7 +229,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     @Override
     public void onResume() {
         super.onResume();
-        LocalBroadcastManager.getInstance(this).registerReceiver(vpnReceiver, new IntentFilter("connectionState"));
+        //LocalBroadcastManager.getInstance(this).registerReceiver(vpnReceiver, new IntentFilter("connectionState"));
 
         Tab tab = getActivityTab();
         if (tab == null)
@@ -243,7 +244,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     public void onPause() {
         super.onPause();
 
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(vpnReceiver);
+        //LocalBroadcastManager.getInstance(this).unregisterReceiver(vpnReceiver);
 
         Tab tab = getActivityTab();
         if (tab == null)
@@ -278,6 +279,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     public void finishNativeInitialization() {
         super.finishNativeInitialization();
 
+        getWindow ().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
 
         int appOpenCount = SharedPreferencesManager.getInstance().readInt(BravePreferenceKeys.BRAVE_APP_OPEN_COUNT);
         SharedPreferencesManager.getInstance().writeInt(BravePreferenceKeys.BRAVE_APP_OPEN_COUNT, appOpenCount + 1);

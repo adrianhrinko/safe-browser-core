@@ -215,6 +215,14 @@ public class BravePrefServiceBridge {
         return BravePrefServiceBridgeJni.get().getVPNConfigUsername();
     }
 
+    public int getMinBrowserVersion() {
+        return BravePrefServiceBridgeJni.get().getMinBrowserVersion();
+    }
+
+    public int getMinAndroidVersion() {
+        return BravePrefServiceBridgeJni.get().getMinAndroidVersion();
+    }
+
     @NativeMethods
     interface Natives {
         void setHTTPSEEnabled(boolean enabled);
@@ -273,6 +281,7 @@ public class BravePrefServiceBridge {
         String getVPNConfigPassword();
         String getVPNConfigUsername();
         String getVPNConfigOVPN();
-
+        int getMinBrowserVersion();
+        int getMinAndroidVersion();
     }
 }

@@ -1,10 +1,12 @@
 package org.chromium.chrome.browser.compliance;
 
-import android.content.Context;
+import org.chromium.base.BuildInfo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.widget.TextView;
 import android.view.ViewGroup;
 import org.chromium.chrome.R;
@@ -24,6 +26,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import org.chromium.chrome.browser.preferences.BravePrefServiceBridge;
 
 public class ComplianceCheckFragment extends Fragment implements View.OnClickListener { 
 
@@ -76,7 +79,7 @@ public class ComplianceCheckFragment extends Fragment implements View.OnClickLis
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        startSafetyNetCheck();
+        startCheck();
     }
 
     @Override
@@ -86,6 +89,25 @@ public class ComplianceCheckFragment extends Fragment implements View.OnClickLis
             mainActivity.finishAndRemoveTask();
         }
 
+    }
+
+    private void startCheck() {
+        showLoader();
+        if (isbrowserAndOSUpToDate()) {
+            performSafetyNetCheck();
+        } else {
+            showToast("Versions check failed.");
+            updateDetail("REASON:\nBrowser or Android version is lower than the minimum set in the policy.\nUpdate browser or Android to the latest version please.");
+            hideLoader();
+        }
+    }
+
+    private boolean isbrowserAndOSUpToDate() {
+        int browserMinVersion = BravePrefServiceBridge.getInstance().getMinBrowserVersion();
+        int osMinVersion = BravePrefServiceBridge.getInstance().getMinAndroidVersion();
+
+        return browserMinVersion <= BuildInfo.getInstance().versionCode && 
+            osMinVersion <= android.os.Build.VERSION.SDK_INT;
     }
 
     private Toast mToast;
@@ -102,7 +124,7 @@ public class ComplianceCheckFragment extends Fragment implements View.OnClickLis
         mToast.show();
     }
 
-    public void startSafetyNetCheck() {
+    public void performSafetyNetCheck() {
         if (null == mainActivity) {
             showToast("No connection with main activity");
             return;
@@ -124,13 +146,23 @@ public class ComplianceCheckFragment extends Fragment implements View.OnClickLis
         });
     }
 
-    private void updateDetailWithHarmfulAppList(List<HarmfulAppsData> harmfulApps) {
+    private List<String> getPackageNames(List<HarmfulAppsData> harmfulApps) {
+        List<String> packages = new ArrayList<String>();
+
+        for (HarmfulAppsData harmfulApp : harmfulApps) {
+            packages.add(harmfulApp.apkPackageName);
+        }
+        
+        return packages;
+    }
+
+    private void updateDetailWithHarmfulAppList(List<String> harmfulApps) {
         StringBuilder txt = new StringBuilder();
         txt.append("REASON:\nSome of installed apps are considered to be harmful:\n\n"); 
 
-        for (HarmfulAppsData harmfulApp : harmfulApps) {
+        for (String harmfulApp : harmfulApps) {
             txt.append(" • ");
-            txt.append(harmfulApp.apkPackageName);
+            txt.append(harmfulApp);
             txt.append("\n");
         }
         txt.append("\nPlease, uninstall apps listed above to be able to continue.\n");
@@ -146,14 +178,14 @@ public class ComplianceCheckFragment extends Fragment implements View.OnClickLis
             public void onResult(Boolean result) {
                 if (result) {
                     showToast("App scan is clear!");
-                    mainActivity.switchFragment(thisFragment, BraveSyncScreensPreference.newInstance(true), mainActivity.INIT_FRAGMENT_TAG);
+                    performInstallationScourcesScan();
                 } else {
                     if (result == null) {
                         showToast("App scan failed.");
                         updateDetail("REASON:\nA problem occured during the app scan.");
                     } else {
                         showToast("App scan have found some suspicious apps on your device.");
-                        updateDetailWithHarmfulAppList(check.getDetectedHarmfulApps());
+                        updateDetailWithHarmfulAppList(getPackageNames(check.getDetectedHarmfulApps()));
                     }
                     hideLoader();
                 }
@@ -161,5 +193,54 @@ public class ComplianceCheckFragment extends Fragment implements View.OnClickLis
         });
     }
 
+    public void performInstallationScourcesScan() {
+        showToast("CHecking installation sources ...");
+        String browsersPackageName = getActivity().getApplication().getPackageName();
+        PackageManager packageManager = getActivity().getApplication().getPackageManager();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<PackageInfo> installedApps = packageManager.getInstalledPackages(PackageManager.GET_ACTIVITIES | PackageManager.GET_PERMISSIONS );
+
+                List<String> appsFromUnknownSources = new ArrayList<String>();
+                
+                for(PackageInfo info : installedApps) {
+                    // retrieving the installer package name
+                    String packageName = info.packageName;
+        
+                    // TODO: only for dev purposes, delete in production
+                    // the browser itself should be always installed from trusted source
+                    if (packageName.contains(browsersPackageName)) continue;
+        
+                    String installerPackageName = packageManager.getInstallerPackageName(packageName);
+                    // if the installer package name is not null , and is different from the Google play store package name
+                    if (installerPackageName != null && !installerPackageName.contains("com.android.vending")) {
+                        // the application is installed from the unknown sources
+                        appsFromUnknownSources.add(packageName);
+                    }
+                }
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!appsFromUnknownSources.isEmpty()) {
+                            showToast("App scan have found some apps installed from unknown sources.");
+                            updateDetailWithHarmfulAppList(appsFromUnknownSources);
+                            hideLoader();
+                            return;
+                        }
+                
+                        showToast("Installation sources are trusted.");  
+                        mainActivity.switchFragment(thisFragment, BraveSyncScreensPreference.newInstance(true), mainActivity.INIT_FRAGMENT_TAG);    
+                    }
+                });
+            }
+         }).start();
+
+
+
+
+    }
 
 }

@@ -126,8 +126,11 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
   //Safe Browser prefs
   registry->RegisterStringPref(kPasswordHash, "", user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
   registry->RegisterStringPref(kVPNConfig, "", user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
+  registry->RegisterStringPref(kVPNConfigReady, "");
   registry->RegisterIntegerPref(kMinBrowserVersion, 0, user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
   registry->RegisterIntegerPref(kMinAndroidVersion, 19, user_prefs::PrefRegistrySyncable::SYNCABLE_PREF);
+  registry->RegisterStringPref(kSBDecrKey, "");
+
 
 
 

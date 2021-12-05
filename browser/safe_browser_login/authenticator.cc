@@ -29,6 +29,14 @@ using base::Base64Encode;
 using crypto::HMAC;
 using crypto::SymmetricKey;
 
+namespace {
+
+Profile* GetOriginalProfile() {
+  return ProfileManager::GetActiveUserProfile()->GetOriginalProfile();
+}
+
+}  // namespace
+
 namespace safe_browser_login {
 
   bool Authenticate(std::string passHash, std::string password) {
@@ -58,7 +66,92 @@ namespace safe_browser_login {
         kParallelizationParameter, kMaxMemoryBytes,
         kHashSizeInBites);
 
-        return xpectedHash == hash->key();
+        if (xpectedHash != hash->key()) {
+          return false;
+        }
+
+        std::unique_ptr<SymmetricKey> decrKey = SymmetricKey::DeriveKeyFromPasswordUsingScrypt(
+        SymmetricKey::AES, password, hash->key(), kCostParameter, kBlockSize,
+        kParallelizationParameter, kMaxMemoryBytes,
+        kHashSizeInBites);
+
+        GetOriginalProfile()->GetPrefs()->SetString(kSBDecrKey, decrKey->key());
+
+        return true;
+  }
+
+  bool DecryptVPNConfig() {
+    std::string config = GetOriginalProfile()->GetPrefs()->GetString(kVPNConfig);
+    std::string decrypted;
+
+    if(Decrypt(config, &decrypted)) {
+      LOG(INFO) << "Decryption successful.";
+      GetOriginalProfile()->GetPrefs()->SetString(kVPNConfigReady, decrypted);
+      return true;
+    }
+
+    LOG(ERROR) << "Decryption FAILED.";
+    return false;
+  }
+
+  bool Decrypt(const std::string& encrypted, std::string* value) {
+    std::string input;
+    const size_t kKeySize = 16;
+    const size_t kIvSize = 16;
+    const size_t kHashSize = 32;
+
+    if (!Base64Decode(encrypted, &input)) {
+      LOG(ERROR) << "B64 decoding failed.";
+      return false;
+    }
+
+    if (input.size() < kIvSize * 2 + kHashSize) {
+      LOG(ERROR) << "Input size is not valid.";
+      return false;
+    }
+
+    std::string key = GetOriginalProfile()->GetPrefs()->GetString(kSBDecrKey);
+    if (key.empty() || key.size() != kKeySize * 2) {
+      LOG(ERROR) << "Decr key check failed.";
+      return false;
+    }
+
+    std::string hmacKey = key.substr(kKeySize);    
+    std::string encrKeyRaw = key.substr(0, kKeySize);
+
+    std::unique_ptr<SymmetricKey> encrKey = SymmetricKey::Import(SymmetricKey::AES, encrKeyRaw);
+      
+    // The input is:
+    // * iv (16 bytes)
+    // * ciphertext (multiple of 16 bytes)
+    // * hash (32 bytes)
+    std::string iv(input.substr(0, kIvSize));
+    std::string ciphertext(
+      input.substr(kIvSize, input.size() - (kIvSize + kHashSize)));
+    std::string hash(input.substr(input.size() - kHashSize, kHashSize));
+
+    HMAC hmac(HMAC::SHA256);
+    if (!hmac.Init(hmacKey)) {
+      LOG(ERROR) << "HMAC initialization failed.";
+      return false;
+    }
+
+    if (!hmac.Verify(ciphertext, hash)) {
+      LOG(ERROR) << "HMAC verification failed.";
+      return false;
+    }
+
+    crypto::Encryptor encryptor;
+    if (!encryptor.Init(encrKey.get(), crypto::Encryptor::CBC, iv)) {
+      LOG(ERROR) << "Encryptor initialization failed.";
+      return false;
+    }
+    if (!encryptor.Decrypt(ciphertext, value)) {
+      LOG(ERROR) << "Decryption process failed.";
+      return false;
+    }
+
+    return true;
   }
 
 }

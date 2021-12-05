@@ -32,5 +32,12 @@ namespace android {
   
       return safe_browser_login::Authenticate(ConvertJavaStringToUTF8(env, passHash), ConvertJavaStringToUTF8(env, password));
     }
+
+  jboolean JNI_LoginServiceBridge_DecryptVPNConfig(
+      JNIEnv* env) {
+      LOG(INFO) << "Decrypting VPN config.";
+  
+      return safe_browser_login::DecryptVPNConfig();
+  }
 }  // namespace android
 }  // namespace chrome

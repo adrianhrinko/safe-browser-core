@@ -215,6 +215,10 @@ public class BravePrefServiceBridge {
         return BravePrefServiceBridgeJni.get().getVPNConfigUsername();
     }
 
+    public boolean isVPNConfigReady() {
+        return BravePrefServiceBridgeJni.get().isVPNConfigReady();
+    }
+
     public int getMinBrowserVersion() {
         return BravePrefServiceBridgeJni.get().getMinBrowserVersion();
     }
@@ -283,5 +287,6 @@ public class BravePrefServiceBridge {
         String getVPNConfigOVPN();
         int getMinBrowserVersion();
         int getMinAndroidVersion();
+        boolean isVPNConfigReady();
     }
 }

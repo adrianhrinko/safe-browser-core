@@ -34,6 +34,7 @@ public class LoginServiceBridge {
 
     /**
      * Authenticates user
+     * (should not run on main thread)
      * @param password from the user
      * @return true when password is valid, false otherwise
      */
@@ -41,10 +42,19 @@ public class LoginServiceBridge {
         return LoginServiceBridgeJni.get().authenticate(passHash, password);
     }
 
+    /**
+     * Decrypts VPN config
+     * (should not run on main thread)
+     * @return false when decryption failed, true otherwise
+     */
+    public boolean decryptVPNConfig() {
+        return LoginServiceBridgeJni.get().decryptVPNConfig();
+    }
 
     @NativeMethods
     interface Natives {
         boolean authenticate(String passHash, String password);
+        boolean decryptVPNConfig();
     }
 
     

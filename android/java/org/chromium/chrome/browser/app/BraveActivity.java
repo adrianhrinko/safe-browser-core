@@ -101,6 +101,7 @@ import org.chromium.chrome.browser.vpn.VPNFragment;
 import org.chromium.chrome.browser.compliance.ComplianceCheckFragment;
 import androidx.fragment.app.Fragment;
 import org.chromium.chrome.browser.BraveSyncWorker;
+import org.chromium.chrome.browser.login.LoginServiceBridge;
 
 import androidx.annotation.Nullable;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
@@ -229,7 +230,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     @Override
     public void onResume() {
         super.onResume();
-        //LocalBroadcastManager.getInstance(this).registerReceiver(vpnReceiver, new IntentFilter("connectionState"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(vpnReceiver, new IntentFilter("connectionState"));
 
         Tab tab = getActivityTab();
         if (tab == null)
@@ -244,7 +245,7 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     public void onPause() {
         super.onPause();
 
-        //LocalBroadcastManager.getInstance(this).unregisterReceiver(vpnReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(vpnReceiver);
 
         Tab tab = getActivityTab();
         if (tab == null)
@@ -385,9 +386,37 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
     /**
      * Start the VPN
      */
-    public void startVpn() {    
+    public void startVpn() {
         Activity thisActivity = this;   
-        
+
+        if (BravePrefServiceBridge.getInstance().isVPNConfigReady()) {
+                LaunchVPN();
+        }
+        else {
+            showToast("Decrypting VPN config.");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    boolean success = LoginServiceBridge.getInstance().decryptVPNConfig();
+                    thisActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (success) {
+                                showToast("Decryprion of VPN config done, VPN will start shortly.");
+                                LaunchVPN();
+                            } else {
+                                showToast("Decryprion of VPN config failed, the VPN config might be corrupted.");
+                            }             
+                        }
+                    });
+                }
+             }).start();
+        }
+    }
+    
+    public void LaunchVPN() {
+        Activity thisActivity = this;   
+
         String country = BravePrefServiceBridge.getInstance().getVPNConfigCountry();
         String ovpn = BravePrefServiceBridge.getInstance().getVPNConfigOVPN();
         String username = BravePrefServiceBridge.getInstance().getVPNConfigUsername();

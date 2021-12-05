@@ -4,11 +4,12 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include "brave/common/pref_names.h"
-
+const char kSBDecrKey[] = "safe_browser.decr_key";
 const char kPasswordHash[] = "safe_browser.password_hash";
 const char kVPNConfig[] = "safe_browser.vpn_config";
 const char kMinBrowserVersion[] = "safe_browser.min_browser_version";
 const char kMinAndroidVersion[] = "safe_browser.min_android_version";
+const char kVPNConfigReady[] = "safe_browser.vpn_config_ready";
 
 const char kAdsBlocked[] = "brave.stats.ads_blocked";
 // We no longer update this pref, but we keep it around for now because it's

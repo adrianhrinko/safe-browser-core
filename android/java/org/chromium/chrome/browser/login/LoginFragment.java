@@ -101,8 +101,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
 
     public void closeFragment() {
         if (null != mainActivity) {
-            mainActivity.closeFragment(this);
-            //mainActivity.switchFragment(this, new VPNFragment(), mainActivity.VPN_FRAGMENT_TAG);
+            mainActivity.switchFragment(this, new VPNFragment(), mainActivity.VPN_FRAGMENT_TAG);
         }    
     }
 

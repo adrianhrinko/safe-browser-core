@@ -221,10 +221,12 @@ jboolean JNI_BravePrefServiceBridge_GetSafetynetCheckFailed(JNIEnv* env) {
   return GetOriginalProfile()->GetPrefs()->GetBoolean(kSafetynetCheckFailed);
 }
 
-
+jboolean JNI_BravePrefServiceBridge_IsVPNConfigReady(JNIEnv* env) {
+  return !GetOriginalProfile()->GetPrefs()->GetString(kVPNConfigReady).empty();
+}
 
 base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConfigCountry(JNIEnv* env) {
-  std::string json = GetOriginalProfile()->GetPrefs()->GetString(kVPNConfig);
+  std::string json = GetOriginalProfile()->GetPrefs()->GetString(kVPNConfigReady);
 
   std::string jsonDecoded;
 
@@ -260,7 +262,7 @@ base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConf
 }
 
 base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConfigUsername(JNIEnv* env) {
-  std::string json = GetOriginalProfile()->GetPrefs()->GetString(kVPNConfig);
+  std::string json = GetOriginalProfile()->GetPrefs()->GetString(kVPNConfigReady);
 
   std::string jsonDecoded;
 
@@ -289,7 +291,7 @@ base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConf
 }
 
 base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConfigPassword(JNIEnv* env) {
-  std::string json = GetOriginalProfile()->GetPrefs()->GetString(kVPNConfig);
+  std::string json = GetOriginalProfile()->GetPrefs()->GetString(kVPNConfigReady);
 
   std::string jsonDecoded;
 
@@ -318,7 +320,7 @@ base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConf
 }
 
 base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConfigOVPN(JNIEnv* env) {
-  std::string json = GetOriginalProfile()->GetPrefs()->GetString(kVPNConfig);
+  std::string json = GetOriginalProfile()->GetPrefs()->GetString(kVPNConfigReady);
 
   std::string jsonDecoded;
 

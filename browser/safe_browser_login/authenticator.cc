@@ -29,17 +29,9 @@ using base::Base64Encode;
 using crypto::HMAC;
 using crypto::SymmetricKey;
 
-namespace {
-
-Profile* GetOriginalProfile() {
-  return ProfileManager::GetActiveUserProfile()->GetOriginalProfile();
-}
-
-}  // namespace
-
 namespace safe_browser_login {
 
-  bool Authenticate(std::string passHash, std::string password) {
+  std::string Authenticate(const std::string passHash, const std::string password) {
 
         const size_t kCostParameter = 8192;  // 2^13.
         const size_t kBlockSize = 8;
@@ -54,7 +46,7 @@ namespace safe_browser_login {
         
         if(!base::Base64Decode(passHash, &hashDecoded)) {
             LOG(ERROR) << "Password hash b64 decoding failed.";
-            return false;
+            return "";
         }
 
         std::string salt = hashDecoded.substr(kHashSizeInBytes);
@@ -67,7 +59,7 @@ namespace safe_browser_login {
         kHashSizeInBites);
 
         if (xpectedHash != hash->key()) {
-          return false;
+          return "";
         }
 
         std::unique_ptr<SymmetricKey> decrKey = SymmetricKey::DeriveKeyFromPasswordUsingScrypt(
@@ -75,30 +67,26 @@ namespace safe_browser_login {
         kParallelizationParameter, kMaxMemoryBytes,
         kHashSizeInBites);
 
-        GetOriginalProfile()->GetPrefs()->SetString(kSBDecrKey, decrKey->key());
+        std::string decrKeyEncoded;
+        
+        base::Base64Encode(decrKey->key(), &decrKeyEncoded);
 
-        return true;
+        return decrKeyEncoded;
   }
 
-  bool DecryptVPNConfig() {
-    std::string config = GetOriginalProfile()->GetPrefs()->GetString(kVPNConfig);
-    std::string decrypted;
+  bool Decrypt(const std::string key, const std::string& encrypted, std::string* value) {
 
-    if(Decrypt(config, &decrypted)) {
-      LOG(INFO) << "Decryption successful.";
-      GetOriginalProfile()->GetPrefs()->SetString(kVPNConfigReady, decrypted);
-      return true;
-    }
-
-    LOG(ERROR) << "Decryption FAILED.";
-    return false;
-  }
-
-  bool Decrypt(const std::string& encrypted, std::string* value) {
-    std::string input;
     const size_t kKeySize = 16;
     const size_t kIvSize = 16;
     const size_t kHashSize = 32;
+
+    std::string input;
+    std::string keyDecoded;
+        
+    if(!base::Base64Decode(key, &keyDecoded)) {
+      LOG(ERROR) << "Key hash b64 decoding failed.";
+      return false;
+    }
 
     if (!Base64Decode(encrypted, &input)) {
       LOG(ERROR) << "B64 decoding failed.";
@@ -106,18 +94,17 @@ namespace safe_browser_login {
     }
 
     if (input.size() < kIvSize * 2 + kHashSize) {
-      LOG(ERROR) << "Input size is not valid.";
+      LOG(ERROR) << "Input size is not valid. (" << input.size() << ")";
       return false;
     }
 
-    std::string key = GetOriginalProfile()->GetPrefs()->GetString(kSBDecrKey);
-    if (key.empty() || key.size() != kKeySize * 2) {
-      LOG(ERROR) << "Decr key check failed.";
+    if (keyDecoded.size() != kKeySize * 2) {
+      LOG(ERROR) << "Decr key check failed. (" << key.size() << ")";
       return false;
     }
 
-    std::string hmacKey = key.substr(kKeySize);    
-    std::string encrKeyRaw = key.substr(0, kKeySize);
+    std::string hmacKey = keyDecoded.substr(kKeySize);    
+    std::string encrKeyRaw = keyDecoded.substr(0, kKeySize);
 
     std::unique_ptr<SymmetricKey> encrKey = SymmetricKey::Import(SymmetricKey::AES, encrKeyRaw);
       

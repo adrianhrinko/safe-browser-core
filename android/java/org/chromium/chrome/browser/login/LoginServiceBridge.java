@@ -13,6 +13,7 @@ import org.chromium.chrome.browser.preferences.BravePrefServiceBridge;
 public class LoginServiceBridge {
 
     private String passHash;
+    private String key;
 
     private LoginServiceBridge() {
     }
@@ -36,25 +37,28 @@ public class LoginServiceBridge {
      * Authenticates user
      * (should not run on main thread)
      * @param password from the user
-     * @return true when password is valid, false otherwise
+     * @return returns true if password is valid, false otherwise
      */
     public boolean authenticate(String password) {
-        return LoginServiceBridgeJni.get().authenticate(passHash, password);
+        this.key = LoginServiceBridgeJni.get().authenticate(passHash, password);
+
+        return !this.key.isEmpty();
     }
 
     /**
      * Decrypts VPN config
      * (should not run on main thread)
-     * @return false when decryption failed, true otherwise
+     * @param message which is encrypted
+     * @return returns decrypted message
      */
-    public boolean decryptVPNConfig() {
-        return LoginServiceBridgeJni.get().decryptVPNConfig();
+    public String decrypt(String message) {
+        return LoginServiceBridgeJni.get().decrypt(message, this.key);
     }
 
     @NativeMethods
     interface Natives {
-        boolean authenticate(String passHash, String password);
-        boolean decryptVPNConfig();
+        String authenticate(String passHash, String password);
+        String decrypt(String message, String key);
     }
 
     

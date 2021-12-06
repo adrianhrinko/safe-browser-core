@@ -24,20 +24,33 @@ namespace chrome {
 namespace android {
 
 
-  jboolean JNI_LoginServiceBridge_Authenticate(
+  base::android::ScopedJavaLocalRef<jstring> JNI_LoginServiceBridge_Authenticate(
       JNIEnv* env,
       const base::android::JavaParamRef<jstring>& passHash,
       const base::android::JavaParamRef<jstring>& password) {
       LOG(INFO) << "Checking password.";
   
-      return safe_browser_login::Authenticate(ConvertJavaStringToUTF8(env, passHash), ConvertJavaStringToUTF8(env, password));
+      std::string key = safe_browser_login::Authenticate(ConvertJavaStringToUTF8(env, passHash), ConvertJavaStringToUTF8(env, password));
+      LOG(INFO) << "Password check result: key of length " << key.size() << " bytes";
+
+      return ConvertUTF8ToJavaString(env, key);
     }
 
-  jboolean JNI_LoginServiceBridge_DecryptVPNConfig(
-      JNIEnv* env) {
+  base::android::ScopedJavaLocalRef<jstring> JNI_LoginServiceBridge_Decrypt(
+      JNIEnv* env,
+      const base::android::JavaParamRef<jstring>& message,
+      const base::android::JavaParamRef<jstring>& key) {
       LOG(INFO) << "Decrypting VPN config.";
-  
-      return safe_browser_login::DecryptVPNConfig();
+
+      std::string decrypted;
+
+      bool success = safe_browser_login::Decrypt(ConvertJavaStringToUTF8(env, key), ConvertJavaStringToUTF8(env, message), &decrypted);
+
+      if (success) {
+        return ConvertUTF8ToJavaString(env, decrypted);
+      }
+      
+      return ConvertUTF8ToJavaString(env, "");
   }
 }  // namespace android
 }  // namespace chrome

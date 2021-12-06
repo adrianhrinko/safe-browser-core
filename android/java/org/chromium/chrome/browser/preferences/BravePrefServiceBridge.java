@@ -207,6 +207,10 @@ public class BravePrefServiceBridge {
         return BravePrefServiceBridgeJni.get().getVPNConfigOVPN();
     }
 
+    public String getVPNConfig() {
+        return BravePrefServiceBridgeJni.get().getVPNConfig();
+    }
+
     public String getVPNConfigPassword() {
         return BravePrefServiceBridgeJni.get().getVPNConfigPassword();
     }
@@ -217,6 +221,9 @@ public class BravePrefServiceBridge {
 
     public boolean isVPNConfigReady() {
         return BravePrefServiceBridgeJni.get().isVPNConfigReady();
+    }
+    public void setVPNConfigReady(String config) {
+        BravePrefServiceBridgeJni.get().setVPNConfigReady(config);
     }
 
     public int getMinBrowserVersion() {
@@ -281,12 +288,14 @@ public class BravePrefServiceBridge {
 
         // Safe Browser prefs
         String getPasswordHash();
+        String getVPNConfigOVPN();
         String getVPNConfigCountry();
         String getVPNConfigPassword();
         String getVPNConfigUsername();
-        String getVPNConfigOVPN();
+        String getVPNConfig();
+        void setVPNConfigReady(String config);
+        boolean isVPNConfigReady();
         int getMinBrowserVersion();
         int getMinAndroidVersion();
-        boolean isVPNConfigReady();
     }
 }

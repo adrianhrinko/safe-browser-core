@@ -387,22 +387,26 @@ public abstract class BraveActivity<C extends ChromeActivityComponent> extends C
      * Start the VPN
      */
     public void startVpn() {
-        Activity thisActivity = this;   
+        Activity thisActivity = this;
+        
+        LoginServiceBridge loginService = LoginServiceBridge.getInstance();
+        BravePrefServiceBridge prefs = BravePrefServiceBridge.getInstance();
 
-        if (BravePrefServiceBridge.getInstance().isVPNConfigReady()) {
+        if (prefs.isVPNConfigReady()) {
                 LaunchVPN();
-        }
-        else {
+        } else {
             showToast("Decrypting VPN config.");
+            String config = prefs.getVPNConfig();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    boolean success = LoginServiceBridge.getInstance().decryptVPNConfig();
+                    String configDecrypted = loginService.decrypt(config);
                     thisActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            if (success) {
+                            if (!configDecrypted.isEmpty()) {
                                 showToast("Decryprion of VPN config done, VPN will start shortly.");
+                                prefs.setVPNConfigReady(configDecrypted);
                                 LaunchVPN();
                             } else {
                                 showToast("Decryprion of VPN config failed, the VPN config might be corrupted.");

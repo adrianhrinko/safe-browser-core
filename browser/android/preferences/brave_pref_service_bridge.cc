@@ -225,6 +225,15 @@ jboolean JNI_BravePrefServiceBridge_IsVPNConfigReady(JNIEnv* env) {
   return !GetOriginalProfile()->GetPrefs()->GetString(kVPNConfigReady).empty();
 }
 
+void JNI_BravePrefServiceBridge_SetVPNConfigReady(JNIEnv* env, const JavaParamRef<jstring>& config) {
+  GetOriginalProfile()->GetPrefs()->SetString(kVPNConfigReady, ConvertJavaStringToUTF8(env, config));
+}
+
+base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConfig(JNIEnv* env) {
+  std::string config = GetOriginalProfile()->GetPrefs()->GetString(kVPNConfig);
+  return ConvertUTF8ToJavaString(env, config);
+}
+
 base::android::ScopedJavaLocalRef<jstring> JNI_BravePrefServiceBridge_GetVPNConfigCountry(JNIEnv* env) {
   std::string json = GetOriginalProfile()->GetPrefs()->GetString(kVPNConfigReady);
 

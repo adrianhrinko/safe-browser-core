@@ -1,0 +1,13 @@
+diff --git a/chrome/browser/ui/android/tab_model/tab_model_jni_bridge.cc b/chrome/browser/ui/android/tab_model/tab_model_jni_bridge.cc
+index 89c2158e2ccf4efe93a9c5d7d98e693da8b581ac..07beba5c121d5a1c63fe43a1e1425f9e6a0675ef 100644
+--- a/chrome/browser/ui/android/tab_model/tab_model_jni_bridge.cc
++++ b/chrome/browser/ui/android/tab_model/tab_model_jni_bridge.cc
+@@ -24,7 +24,7 @@
+ #include "content/public/browser/web_contents.h"
+ #include "content/public/common/resource_request_body_android.h"
+ #include "ui/base/window_open_disposition.h"
+-
++#include "brave/components/sync_device_info/brave_device_info.h"
+ using base::android::AttachCurrentThread;
+ using base::android::ConvertUTF8ToJavaString;
+ using base::android::JavaParamRef;

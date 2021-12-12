@@ -1,13 +1,20 @@
 diff --git a/chrome/android/java/src/org/chromium/chrome/browser/app/ChromeActivity.java b/chrome/android/java/src/org/chromium/chrome/browser/app/ChromeActivity.java
-index bcefc55f69ce1810cb7e70a15613aba5d6c96a80..595817c9826f6a1d89da0125f758301d2896e17c 100644
+index 595817c9826f6a1d89da0125f758301d2896e17c..1591a32c5cf84d90824d242397581ef938b5edd8 100644
 --- a/chrome/android/java/src/org/chromium/chrome/browser/app/ChromeActivity.java
 +++ b/chrome/android/java/src/org/chromium/chrome/browser/app/ChromeActivity.java
-@@ -331,7 +331,7 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
-     NightModeReparentingController mNightModeReparentingController;
- 
-     protected ChromeActivity() {
--        mIntentHandler = new IntentHandler(this, createIntentHandlerDelegate());
-+        mIntentHandler = new org.chromium.chrome.browser.BraveIntentHandler(this, createIntentHandlerDelegate());
-     }
- 
-     @Override
+@@ -543,6 +543,7 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
+             WarmupManager warmupManager = WarmupManager.getInstance();
+             if (warmupManager.hasViewHierarchyWithToolbar(getControlContainerLayoutId())) {
+                 View placeHolderView = new View(this);
++                getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+                 setContentView(placeHolderView);
+                 ViewGroup contentParent = (ViewGroup) placeHolderView.getParent();
+                 warmupManager.transferViewHierarchyTo(contentParent);
+@@ -567,6 +568,7 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
+             // https://crbug.com/639352.
+             try (StrictModeContext ignored = StrictModeContext.allowDiskWrites()) {
+                 TraceEvent.begin("setContentView(R.layout.main)");
++                getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+                 setContentView(R.layout.main);
+                 TraceEvent.end("setContentView(R.layout.main)");
+                 if (getControlContainerLayoutId() != NO_CONTROL_CONTAINER) {

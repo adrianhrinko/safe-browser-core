@@ -1,0 +1,12 @@
+diff --git a/components/content_settings/core/browser/content_settings_policy_provider.cc b/components/content_settings/core/browser/content_settings_policy_provider.cc
+index 8b03e7d658ce22649f2e8ff4db35ca3706a40b79..e9b2a3ec4ac0d0485d828fd5d98a49ad7af6cef4 100644
+--- a/components/content_settings/core/browser/content_settings_policy_provider.cc
++++ b/components/content_settings/core/browser/content_settings_policy_provider.cc
+@@ -350,7 +350,6 @@ void PolicyProvider::GetContentSettingsFromPreferences(
+ 
+     const PrefService::Preference* pref = prefs_->FindPreference(pref_name);
+     DCHECK(pref);
+-    DCHECK(!pref->HasUserSetting() && !pref->HasExtensionSetting());
+ 
+     const base::ListValue* pattern_str_list = nullptr;
+     if (!pref->GetValue()->GetAsList(&pattern_str_list)) {

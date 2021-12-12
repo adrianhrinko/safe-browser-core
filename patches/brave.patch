@@ -1,0 +1,7 @@
+diff --git a/brave b/brave
+index 68bb1f8d93f1ebe953bd63f605ce160054576555..87b8c1d977b8bf15ebd9962ec37cc6dc251a7d9f 160000
+--- a/brave
++++ b/brave
+@@ -1 +1 @@
+-Subproject commit 68bb1f8d93f1ebe953bd63f605ce160054576555
++Subproject commit 87b8c1d977b8bf15ebd9962ec37cc6dc251a7d9f-dirty

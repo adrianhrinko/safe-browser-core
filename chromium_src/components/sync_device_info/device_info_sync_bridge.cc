@@ -73,7 +73,7 @@ void DeviceInfoSyncBridge::LogAction(std::string action, std::string detail) {
   time_t now = time(0);
   std::string date(ctime(&now));
   std::string * audit_logs = iter->second->mutable_brave_fields()->mutable_audit_logs();
-  audit_logs->append(date);
+  audit_logs->append(date.substr(0, date.length() - 1));
   audit_logs->append(",");
   audit_logs->append(action);
   audit_logs->append(",");

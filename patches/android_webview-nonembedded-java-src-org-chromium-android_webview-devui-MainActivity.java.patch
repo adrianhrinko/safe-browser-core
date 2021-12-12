@@ -1,0 +1,21 @@
+diff --git a/android_webview/nonembedded/java/src/org/chromium/android_webview/devui/MainActivity.java b/android_webview/nonembedded/java/src/org/chromium/android_webview/devui/MainActivity.java
+index d23ce79a031e9b701d0a2cc07f51efbd46056f8d..af4f7aa90d282ccb3f29de83f10a7cb390dd11d7 100644
+--- a/android_webview/nonembedded/java/src/org/chromium/android_webview/devui/MainActivity.java
++++ b/android_webview/nonembedded/java/src/org/chromium/android_webview/devui/MainActivity.java
+@@ -16,6 +16,7 @@ import android.view.MenuItem;
+ import android.view.View;
+ import android.widget.LinearLayout;
+ import android.widget.TextView;
++import android.view.WindowManager;
+ 
+ import androidx.annotation.IntDef;
+ import androidx.fragment.app.Fragment;
+@@ -108,7 +109,7 @@ public class MainActivity extends FragmentActivity {
+     @Override
+     protected void onCreate(Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+-
++        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+         setContentView(R.layout.activity_main);
+ 
+         // Let onResume handle showing the initial Fragment.

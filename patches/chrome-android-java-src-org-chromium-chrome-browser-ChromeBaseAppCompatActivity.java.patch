@@ -1,0 +1,20 @@
+diff --git a/chrome/android/java/src/org/chromium/chrome/browser/ChromeBaseAppCompatActivity.java b/chrome/android/java/src/org/chromium/chrome/browser/ChromeBaseAppCompatActivity.java
+index c3a73880272e5a9501b6e61895fde39f25faf673..7e119dde7614ebbefb9f7d043d576bc3d1a1ba0e 100644
+--- a/chrome/android/java/src/org/chromium/chrome/browser/ChromeBaseAppCompatActivity.java
++++ b/chrome/android/java/src/org/chromium/chrome/browser/ChromeBaseAppCompatActivity.java
+@@ -8,6 +8,7 @@ import android.content.Context;
+ import android.content.SharedPreferences;
+ import android.content.res.Configuration;
+ import android.os.Bundle;
++import android.view.WindowManager;
+ 
+ import androidx.annotation.CallSuper;
+ import androidx.annotation.Nullable;
+@@ -46,6 +47,7 @@ public class ChromeBaseAppCompatActivity
+ 
+     @Override
+     protected void onCreate(@Nullable Bundle savedInstanceState) {
++        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+         initializeNightModeStateProvider();
+         mNightModeStateProvider.addObserver(this);
+         super.onCreate(savedInstanceState);

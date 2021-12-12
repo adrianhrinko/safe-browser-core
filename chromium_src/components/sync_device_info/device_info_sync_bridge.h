@@ -14,7 +14,7 @@
       override;                                                              \
   std::vector<std::unique_ptr<BraveDeviceInfo>>                              \
   GetAllBraveDeviceInfo() const override;                                    \
-  void LogAction(std::string action, std::string detail);                    \
+  void LogAction(std::string action, std::string detail) override;           \
   void ForcePulseForTest 
 
 

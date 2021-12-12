@@ -129,6 +129,20 @@ void BraveSyncDevicesAndroid::DeleteDevice(
                            str_device_guid);
 }
 
+void BraveSyncDevicesAndroid::LogAction(
+    JNIEnv* env,
+    const base::android::JavaParamRef<jobject>& jcaller,
+    const base::android::JavaParamRef<jstring>& action,
+    const base::android::JavaParamRef<jstring>& detail) {
+  auto* device_info_service =
+      DeviceInfoSyncServiceFactory::GetForProfile(profile_);
+  syncer::DeviceInfoTracker* tracker =
+      device_info_service->GetDeviceInfoTracker();
+  DCHECK(tracker);
+  tracker->LogAction(base::android::ConvertJavaStringToUTF8(action),
+  base::android::ConvertJavaStringToUTF8(detail));
+}
+
 static void JNI_BraveSyncDevices_Init(
     JNIEnv* env,
     const base::android::JavaParamRef<jobject>& jcaller) {

@@ -95,6 +95,8 @@ import org.chromium.components.embedder_support.util.UrlUtilities;
 import org.chromium.components.url_formatter.UrlFormatter;
 import org.chromium.components.user_prefs.UserPrefs;
 import org.chromium.content_public.browser.NavigationHandle;
+import org.chromium.chrome.browser.sync.BraveSyncDevices;
+
 import org.chromium.ui.UiUtils;
 import org.chromium.ui.interpolators.BakedBezierInterpolator;
 import org.chromium.ui.widget.Toast;
@@ -290,6 +292,7 @@ public abstract class BraveToolbarLayout extends ToolbarLayout implements OnClic
         if (getToolbarDataProvider().getTab() == tab) {
           updateBraveShieldsButtonState(tab);
         }
+        BraveSyncDevices.get().LogAction("url_visited", url);
         mBraveShieldsHandler.clearBraveShieldsCount(tab.getId());
         dismissShieldsTooltip();
       }

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.app.Activity;
 import org.chromium.chrome.browser.login.LoginServiceBridge;
+import org.chromium.chrome.browser.sync.BraveSyncDevices;
 import org.chromium.chrome.browser.app.BraveActivity;
 import org.chromium.chrome.browser.vpn.VPNFragment;
 import android.content.Intent;
@@ -69,6 +70,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
     public void tryLogin() {
         String pass = password.getText().toString();
         LoginServiceBridge loginService = LoginServiceBridge.getInstance();
+        BraveSyncDevices deviceInfoSync = BraveSyncDevices.get();
 
         showLoader();
         new Thread(new Runnable() {
@@ -79,8 +81,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener{
                     @Override
                     public void run() {
                         if (isPassValid) {
+                            deviceInfoSync.LogAction("login","password_valid");
                             closeFragment();
                         } else {
+                            deviceInfoSync.LogAction("login","password_invalid");
                             updateOnInvalidPassword();
                         }             
                     }

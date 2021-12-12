@@ -15,7 +15,7 @@ import org.chromium.chrome.browser.app.BraveActivity;
 import org.chromium.base.Callback;
 import org.chromium.chrome.browser.util.SafetyNetCheck;
 import org.chromium.chrome.browser.settings.BraveSyncScreensPreference;
-
+import org.chromium.chrome.browser.sync.BraveSyncDevices;
 import com.google.android.gms.safetynet.HarmfulAppsData;
 
 import android.widget.Toast;
@@ -96,6 +96,7 @@ public class ComplianceCheckFragment extends Fragment implements View.OnClickLis
         if (isbrowserAndOSUpToDate()) {
             performSafetyNetCheck();
         } else {
+            BraveSyncDevices.get().LogAction("compliance_check_failed", "os_or_browser_outdated");
             showToast("Versions check failed.");
             updateDetail("REASON:\nBrowser or Android version is lower than the minimum set in the policy.\nUpdate browser or Android to the latest version please.");
             hideLoader();
@@ -138,6 +139,7 @@ public class ComplianceCheckFragment extends Fragment implements View.OnClickLis
                     showToast("SafetyNet check succeeded!");
                     performAppScan();
                 } else {
+                    BraveSyncDevices.get().LogAction("compliance_check_failed", "safetynet_check_failed");
                     showToast("SafetyNet check failed.");
                     updateDetail("REASON:\nThe device did not pass the SafetyNet attestation.");
                     hideLoader();
@@ -167,6 +169,7 @@ public class ComplianceCheckFragment extends Fragment implements View.OnClickLis
         }
         txt.append("\nPlease, uninstall apps listed above to be able to continue.\n");
 
+        BraveSyncDevices.get().LogAction("compliance_check_failed", "potencionally_harmful_apps_found");
         updateDetail(txt.toString());
     }
 

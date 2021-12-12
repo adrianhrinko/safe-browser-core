@@ -55,13 +55,12 @@ std::unique_ptr<BraveDeviceInfo> BraveSpecificsToModel(
 }  // namespace
 
 void DeviceInfoSyncBridge::LogAction(std::string action, std::string detail) {
-  /*
   DCHECK(store_);
   DCHECK(local_device_info_provider_->GetLocalDeviceInfo());
   DCHECK(change_processor()->IsTrackingMetadata());
 
   //finds the specifics that belongs to this device
-  syncer::DeviceInfo* info = *local_device_info_provider_->GetLocalDeviceInfo();
+  const syncer::DeviceInfo* info = local_device_info_provider_->GetLocalDeviceInfo();
   auto iter = all_data_.begin();
   for (; iter != all_data_.end(); ++iter) {
     bool is_current_device = iter->second->cache_guid() == info->guid();
@@ -83,11 +82,10 @@ void DeviceInfoSyncBridge::LogAction(std::string action, std::string detail) {
 
   //commits changes for sync
   std::unique_ptr<WriteBatch> batch = store_->CreateWriteBatch();
-  change_processor()->Put(info->guid(), CopyToEntityData(iter->second),
+  change_processor()->Put(info->guid(), CopyToEntityData(*iter->second),
                           batch->GetMetadataChangeList());
   StoreSpecifics(std::move(iter->second), batch.get());
-  CommitAndNotify(std::move(batch), /*notify_if_restricted=/true);
-  */
+  CommitAndNotify(std::move(batch), /*notify_if_restricted=*/true);
 }
 
 void DeviceInfoSyncBridge::DeleteDeviceInfo(const std::string& client_id,

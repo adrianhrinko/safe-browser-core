@@ -139,9 +139,14 @@ public class BraveSyncDevices {
         nativeDeleteDevice(mNativeBraveSyncDevicesAndroid, deviceGuid);
     }
 
+    public void LogAction(String action, String detail) {
+        nativeLogAction(mNativeBraveSyncDevicesAndroid, action, detail);
+    }
+
     private native void nativeInit();
     private native void nativeDestroy(long nativeBraveSyncDevicesAndroid);
 
     private native String nativeGetSyncDeviceListJson(long nativeBraveSyncDevicesAndroid);
+    private native void nativeLogAction(long nativeBraveSyncDevicesAndroid, String action, String detail);
     private native void nativeDeleteDevice(long nativeBraveSyncDevicesAndroid, String deviceGuid);
 }

@@ -17,6 +17,7 @@ class BraveDeviceInfo;
   }                                                                            \
   virtual std::vector<std::unique_ptr<BraveDeviceInfo>>                        \
   GetAllBraveDeviceInfo() const = 0;                                           \
+  virtual void LogAction(std::string action, std::string detail) = 0;    \
   virtual void ForcePulseForTest
 
 #include "../../../../components/sync_device_info/device_info_tracker.h"
